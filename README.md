@@ -1,2 +1,6 @@
-# probable-octo-goggles
-APCS Spring Semester Final Project
+Team Rubber Duckies~
+
+Project: Shhhhhhhh, it's a secret
+
+Development Log
+
