@@ -1,6 +1,12 @@
 Team Rubber Duckies~
 
-Project: Shhhhhhhh, it's a secret
+Project: Multiplayer Snakes Stuffs with Networking
+
+(Ignore the drawing stuffs)
+
 
 Development Log
+
+5/14/16
+- stuffs
 
