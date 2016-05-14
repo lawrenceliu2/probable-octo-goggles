@@ -110,25 +110,25 @@ void drawGrid() {
 
 void checkKeys() {
   if (keyPressed) {
-    if (key == 'w') {
+    if (key == 'w' && dy!= 1) {
       dx = 0;
       dy = -1;
       dz = 0;
       client.write(""+ID+"up"+"\n");
     }
-    if (key == 'a') {
+    if (key == 'a' && dx != 1) {
       dx = -1;
       dy = 0;
       dz = 0;
       client.write(""+ID+"left"+"\n");
     }
-    if (key == 's') {
+    if (key == 's' && dy != -1) {
       dx = 0;
       dy = 1;
       dz = 0;
       client.write(""+ID+"down"+"\n");
     }
-    if (key == 'd') {
+    if (key == 'd' && dx != -1) {
       dx = 1;
       dy = 0;
       dz = 0;
