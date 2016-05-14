@@ -4,6 +4,7 @@ Client c;
 String dataIn; 
 String input;
 int data[];
+int brushWidth;
 
 void setup() { 
   size(500, 500); 
@@ -13,6 +14,7 @@ void setup() {
   c = new Client(this, "192.168.1.8", 1234); 
   textAlign(CENTER, CENTER);
   background(255);
+  brushWidth = 1;
 } 
 
 void draw() { 
@@ -20,11 +22,20 @@ void draw() {
   if (c.available() > 0) { 
     input = c.readString();
     input = input.substring(0, input.indexOf("\n"));  // Only up to the newline
-    if (input.equals("erase")) {
-      background(255);
-    } else {
-      data = int(split(input, ' '));  // Split values into an array
-      line(data[0], data[1], data[2], data[3]);
+    System.out.println(input);
+    parseCommands();
+  }
+}
+
+void parseCommands() {
+  if (input.equals("erase")) {
+    background(255);
+  } else {
+    data = int(split(input, ' '));  // Split values into an array
+    if (data.length==5) {
+      brushWidth = data[0];
+      strokeWeight(brushWidth);
+      line(data[1], data[2], data[3], data[4]);
     }
   }
 }
