@@ -19,7 +19,9 @@ void draw() {
     if (data!=null) {
       fill(255);
       text(data, width/2, height/2);
+      s.write(data);
     }
+    
   }
 }
 

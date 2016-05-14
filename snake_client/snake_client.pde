@@ -34,12 +34,16 @@ void draw() {
     background(0);
     b.display();
     if (b.isClicked()) {
+      println(client.readString());
       mode = 2;
     }
   }
   if (mode == 2) {
     //camera(width/2, height/2, height/2/tan(PI/6) + 200, width/2, height/2, 0, 0, 1, 0);
     lights();
+    if(client.available()>0) {
+      println(client.readString());
+    }
     checkKeys();
     if (frameCount%3==0) {
       textSize(15);
@@ -71,6 +75,7 @@ void draw() {
     text("YOU LOSE", width/2, height/3);
     textSize(25);
     text("Score: " + (s.segments.size()-5), width/2, height/2);
+    client.write("" + ID + "score"+ (s.segments.size()-5));
     b = new Button("Play Again", width/4, 3 * height/4, width/2, height/8);
     b.display();
     if (b.isClicked()) {
