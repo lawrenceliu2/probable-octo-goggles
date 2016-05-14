@@ -2,7 +2,6 @@ import processing.net.*;
 
 Server s;
 //int port = 5204;
-String message = "Hello";
 int brushWidth;
 
 void setup() {

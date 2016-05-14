@@ -21,7 +21,9 @@ void draw() {
   stroke(0);
   if (c.available() > 0) { 
     input = c.readString();
-    input = input.substring(0, input.indexOf("\n"));  // Only up to the newline
+    if (input.indexOf("\n")>=0) {
+      input = input.substring(0, input.indexOf("\n"));
+    }// Only up to the newline
     System.out.println(input);
     parseCommands();
   }
