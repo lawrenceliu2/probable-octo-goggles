@@ -1,8 +1,7 @@
 Team Rubber Duckies~
 
-Project: Multiplayer Snakes Stuffs with Networking
 
-(Ignore the drawing stuffs)
+Project: Multiplayer Snakes Stuffs with Networking
 
 
 Development Log
