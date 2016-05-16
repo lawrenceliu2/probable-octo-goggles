@@ -16,7 +16,7 @@ color c;
 void setup() {
   size(500, 500, P3D);
   background(0);
-  client = new Client(this, "192.168.1.8", 1234);
+  client = new Client(this, "127.0.0.1", 1234);
   ID = client.read();
   c =  color(random(255/ID), random(255/ID), random(255/ID));
   s = new SnakeBody((int)(width/40)*20, (int)(height/40)*20, 0, 20, c);
