@@ -4,10 +4,10 @@ Server s;
 int connectedClients;
 
 void setup() {
-  size(200, 200);
+  size(300, 300);
   s = new Server(this, 1234);
-  textAlign(CENTER, CENTER);
-  textSize(width/4);
+  textAlign(CENTER);
+  textSize(width/10);
   connectedClients=0;
 }
 
@@ -18,7 +18,10 @@ void draw() {
     String data = thisClient.readString();
     if (data!=null) {
       fill(255);
-      text(data, width/2, height/2);
+      for (int i = 0; i<connectedClients;i++){
+        //fill( HOW DO I GET THE COLOR OF THE SNAKEEEE
+        text(data, width/2-40*i, height/2-40*i);
+      }
       s.write(data);
     }
     
