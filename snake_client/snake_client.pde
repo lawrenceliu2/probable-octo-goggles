@@ -28,7 +28,7 @@ public void openingScreen() {
   background(0);
   b.display();
   if (b.isClicked()) {
-    client = new Client(this, "192.168.1.8", 1234);
+    client = new Client(this, "127.0.0.1", 1234);
     String joinRequest = client.readString();
     ID = int(joinRequest.substring(0, joinRequest.indexOf("join")));
     client.write("" + ID + "join");
