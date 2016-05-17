@@ -3,8 +3,10 @@ public class SnakeBody {
   float size;
   boolean isDead;
   SnakeBit head;
+  float dx, dy, dz;
 
   SnakeBody(float x, float y, float z, float size, color c) {
+    this.dx=1;
     this.size = size;
     head = new SnakeBit(x, y, z, size, c);
     segments = new ArrayList<SnakeBit>();
@@ -14,13 +16,13 @@ public class SnakeBody {
     }
   }
 
-  void move(float distX, float distY, float distZ) {
-    for(int i = 2; i < segments.size(); i++) {
-      if(segments.get(0).x == segments.get(i).x && segments.get(0).y == segments.get(i).y) {
+  void move() {
+    for (int i = 2; i < segments.size(); i++) {
+      if (segments.get(0).x == segments.get(i).x && segments.get(0).y == segments.get(i).y) {
         isDead=true;
       }
     }
-    segments.add(0, new SnakeBit(segments.get(0).x + (distX * size), segments.get(0).y + (distY * size), segments.get(0).z + (distZ * size), size, c));
+    segments.add(0, new SnakeBit(segments.get(0).x + (dx * size), segments.get(0).y + (dy * size), segments.get(0).z + (dz * size), size, c));
     //segments.get(0).move(distX * size, distY * size, distZ * size);
     segments.remove(segments.size()-1);
   }
@@ -33,11 +35,35 @@ public class SnakeBody {
       isDead = true;
     }
   }
-  
+
   void grow() {
     segments.add(0, new SnakeBit(segments.get(0).x, segments.get(0).y, segments.get(0).z, size, c));
   }
-  
+
+  void turnUp() {
+    s.dx = 0;
+    s.dy = -1;
+    s.dz = 0;
+  }
+
+  void turnRight() {
+    s.dx = 1;
+    s.dy = 0;
+    s.dz = 0;
+  }
+
+  void turnDown() {
+    s.dx = 0;
+    s.dy = 1;
+    s.dz = 0;
+  }
+
+  void turnLeft() {
+    s.dx = -1;
+    s.dy = 0;
+    s.dz = 0;
+  }
+
   float[] getPosition() {
     float[] positions = new float[3];
     positions[0] = segments.get(0).x;
@@ -45,7 +71,7 @@ public class SnakeBody {
     positions[2] = segments.get(0).z;
     return positions;
   }
-  
+
   boolean ate(Apple a) {
     return a.x == segments.get(0).x && a.y == segments.get(0).y && a.z == segments.get(0).z;
   }

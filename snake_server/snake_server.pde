@@ -32,5 +32,5 @@ void serverEvent(Server someserver, Client aclient) {
 
 void disconnectEvent(Client aclient){
   connectedClients--;
-  println("Client disconnect\nConnected clients: " + connectedClients);
+  text("Client disconnect\nConnected clients: " + connectedClients, height/2, width/2);
 }
