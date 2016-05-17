@@ -18,9 +18,11 @@ void draw() {
     String data = thisClient.readString();
     if (data!=null) {
       fill(255);
+      text("Connected Snakes", width/2, 30);
       for (int i = 0; i<connectedClients;i++){
         //fill( HOW DO I GET THE COLOR OF THE SNAKEEEE
-        text(data, width/2-40*i, height/2-40*i);
+        //text(data, width/2, height/3+40*i);
+        text("Snake "+data.substring(0,1)+" "+data.substring(1), width/2, height/3+40*i);
       }
       s.write(data);
     }
