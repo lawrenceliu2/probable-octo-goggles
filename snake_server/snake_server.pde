@@ -26,11 +26,13 @@ void draw() {
 }
 
 void serverEvent(Server someserver, Client aclient) {
+  println("New client joined with IP: " + aclient.ip());
   connectedClients++;
-  someserver.write(connectedClients);
+  someserver.write("" + connectedClients + "join");
+  //s.write(joinRequest);
 }
 
 void disconnectEvent(Client aclient){
   connectedClients--;
-  text("Client disconnect\nConnected clients: " + connectedClients, height/2, width/2);
+  println("Client disconnect\nConnected clients: " + connectedClients);
 }

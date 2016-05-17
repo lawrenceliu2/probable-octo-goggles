@@ -41,27 +41,27 @@ public class SnakeBody {
   }
 
   void turnUp() {
-    s.dx = 0;
-    s.dy = -1;
-    s.dz = 0;
+    dx = 0;
+    dy = -1;
+    dz = 0;
   }
 
   void turnRight() {
-    s.dx = 1;
-    s.dy = 0;
-    s.dz = 0;
+    dx = 1;
+    dy = 0;
+    dz = 0;
   }
 
   void turnDown() {
-    s.dx = 0;
-    s.dy = 1;
-    s.dz = 0;
+    dx = 0;
+    dy = 1;
+    dz = 0;
   }
 
   void turnLeft() {
-    s.dx = -1;
-    s.dy = 0;
-    s.dz = 0;
+    dx = -1;
+    dy = 0;
+    dz = 0;
   }
 
   float[] getPosition() {
