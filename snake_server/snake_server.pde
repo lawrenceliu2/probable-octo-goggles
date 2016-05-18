@@ -28,6 +28,7 @@ void draw() {
       if (data!=null) {
         fill(0);
         textSize(width/8);
+        println(data);
         text(data, width/2, 3 * height/4);
         s.write(data);
       }

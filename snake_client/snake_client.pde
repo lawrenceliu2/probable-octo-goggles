@@ -78,7 +78,7 @@ void draw() {
     b = new Button("Play Again", width/4, 3 * height/4, width/2, height/8);
     b.display();
     if (b.isClicked()) {
-      resetBoard();
+      exit();
     }
   }
 }
@@ -88,10 +88,10 @@ public void openingScreen() {
   String serverMessage = client.readString();
   if (serverMessage != null) {
     if (serverMessage.indexOf("wait")<0) {
-      println(serverMessage);
+      client.write((int)(int(serverMessage.substring(0, serverMessage.indexOf("play")))*20));
+      s = new SnakeBody((int)(width/40)*20, (int)(int(serverMessage.substring(0, serverMessage.indexOf("play")))*20), 0, 20, c);
       b.changeText("Play");
       mode = "GAMEPLAY";
-      
     }
   } else {
     b.changeText("Waiting");
@@ -134,6 +134,8 @@ void readServer() {
   String command = client.readString();
   if (command!=null) {
     println(command);
+    if (command.indexOf("play")>0) {
+    }
     if (command.indexOf("up")>0 && int(command.substring(0, command.indexOf("up"))) == ID) {
       println("GOING UP");
       s.turnUp();
