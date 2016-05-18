@@ -17,13 +17,7 @@ void setup() {
   size(500, 500, P3D);
   background(0);
   client = new Client(this, "127.0.0.1", 1234);
-  String joinConfirmed=null;
-  while (joinConfirmed==null) {
-    joinConfirmed = client.readString();
-  }
-  ID = int(joinConfirmed.substring(0, joinConfirmed.indexOf("join")));
-  c =  color(100+155*sin(ID), 100+155*cos(ID), 100+155*tan(ID));
-  s = new SnakeBody((int)(width/40)*20, (int)(height/40)*20, 0, 20, c);
+  //String  joinConfirmed = client.readString();
   //s2 = new SnakeBody((int)(width/30)*20, (int)(height/30)*20, 0, 20, c);
   a = new Apple(((int)random((width/20)-1))*20+20, ((int)random((height/20)-1))*20+20, 0, 20); 
   b = new Button("PLAY", width/4, height/4, width/2, height/2);
@@ -65,6 +59,7 @@ void draw() {
   }
   if (s.isDead) {
     client.write("" + ID + "score"+ (s.segments.size()-5));
+    s.isDead = !s.isDead;
     mode = "DEAD";
   }
   if (mode.equals("DEAD")) {
@@ -88,10 +83,16 @@ public void openingScreen() {
   String serverMessage = client.readString();
   if (serverMessage != null) {
     if (serverMessage.indexOf("wait")<0) {
-      client.write((int)(int(serverMessage.substring(0, serverMessage.indexOf("play")))*20));
-      s = new SnakeBody((int)(width/40)*20, (int)(int(serverMessage.substring(0, serverMessage.indexOf("play")))*20), 0, 20, c);
-      b.changeText("Play");
-      mode = "GAMEPLAY";
+      if (serverMessage.indexOf("join")>0) {
+        ID = int(serverMessage.substring(0, serverMessage.indexOf("join")));
+        c =  color(100+155*sin(ID), 100+155*cos(ID), 100+155*tan(ID));
+        s = new SnakeBody((int)(width/40)*20, (int)(height/40)*20, 0, 20, c);
+      } else {
+        client.write((int)(int(serverMessage.substring(0, serverMessage.indexOf("play")))*20));
+        s = new SnakeBody((int)(width/40)*20, (int)(int(serverMessage.substring(0, serverMessage.indexOf("play")))*20), 0, 20, c);
+        b.changeText("Play");
+        mode = "GAMEPLAY";
+      }
     }
   } else {
     b.changeText("Waiting");
