@@ -8,6 +8,7 @@
 
 -Basic snake game set up in client (regular snake, play button, game over screen with score, randomly colored snakes)
 
+<<<<<<< HEAD
 -Server receives what button is pressed and final score
 
 
@@ -17,4 +18,15 @@
 
 -Bug report: The first time Lawrence opened the server and client, said bug occured. However, after restarting both, the game played as usual with no bugs. After restarting yet again, the bug appeared.
 -Server should relay information based on number of clients now.
+=======
+5/14/16
+- stuffs
+- DAN: Wrote base snake game
+>>>>>>> Dan-Dev
 
+5/15/16
+- DAN: Wrote simple network framework with server and client
+
+5/16/16
+- DAN: Made a ghost snake to test server sided steering. It works
+- DAN: Also fixed assignment of -1 ID's
