@@ -4,4 +4,9 @@ public class Others {
  public Others() {
    others = new ArrayList<SnakeBody>();
  }
+ 
+ public void add(SnakeBody s) {
+   others.add(s);
+ }
+ 
 }

@@ -5,9 +5,9 @@ String input;
 int data[];
 int ID;
 
-SnakeBody s, s2;
+SnakeBody s;//, s2;
 Apple a;
-int mode;
+String mode;
 float maxPlaneX, minPlaneX, maxPlaneY, minPlaneY;
 Button b;
 color c;
@@ -16,63 +16,58 @@ void setup() {
 
   size(500, 500, P3D);
   background(0);
+  client = new Client(this, "127.0.0.1", 1234);
+  String joinConfirmed=null;
+  while (joinConfirmed==null) {
+    joinConfirmed = client.readString();
+  }
+  ID = int(joinConfirmed.substring(0, joinConfirmed.indexOf("join")));
   c =  color(100+155*sin(ID), 100+155*cos(ID), 100+155*tan(ID));
   s = new SnakeBody((int)(width/40)*20, (int)(height/40)*20, 0, 20, c);
-  s2 = new SnakeBody((int)(width/30)*20, (int)(height/30)*20, 0, 20, c);
+  //s2 = new SnakeBody((int)(width/30)*20, (int)(height/30)*20, 0, 20, c);
   a = new Apple(((int)random((width/20)-1))*20+20, ((int)random((height/20)-1))*20+20, 0, 20); 
   b = new Button("PLAY", width/4, height/4, width/2, height/2);
-  mode = 1;
+  mode = "PLAYBUTTON";
 }
 
-public void openingScreen() {
-  background(0);
-  b.display();
-  if (b.isClicked()) {
-    client = new Client(this, "127.0.0.1", 1234);
-    String joinRequest = client.readString();
-    ID = int(joinRequest.substring(0, joinRequest.indexOf("join")));
-    client.write("" + ID + "join");
-    println(client.readString());
-    mode = 2;
-  }
-}
 void draw() {
 
-  if (mode == 1) {
+  if (mode.equals("PLAYBUTTON")) {
     openingScreen();
   }
 
-  if (mode == 2) {
+  if (mode.equals("GAMEPLAY")) {
     lights();
     checkKeys();
+    readServer();
+
+    textSize(15);
+    text(s.segments.size(), 15, 15);
+    background(0);
+
+    //s2.move();
+    //s2.display();
     if (frameCount%4==0) {
-
-      textSize(15);
-      text(s.segments.size(), 15, 15);
-      background(0);
-
-      s2.move();
       s.move();
-      s2.display();
-      s.display();
+    }
+    s.display();
 
-      if (s.ate(a) || s2.ate(a)) {
-        a.move(((int)random((width/20)-1))*20+20, ((int)random((height/20)-1))*20+20, 0); 
-        s.grow();
-        s2.grow();
-      }
-      a.display();
+    if (s.ate(a) /*|| s2.ate(a)*/) {
+      a.move(((int)random((width/20)-1))*20+20, ((int)random((height/20)-1))*20+20, 0); 
+      s.grow();
+      //s2.grow();
     }
-    if (!inBounds()) {
-      client.write("" + ID + "score"+ (s.segments.size()-5));
-      mode = 3;
-    }
-    if (s.isDead) {
-      client.write("" + ID + "score"+ (s.segments.size()-5));
-      mode = 3;
-    }
+    a.display();
   }
-  if (mode == 3) {
+  if (!inBounds()) {
+    client.write("" + ID + "score"+ (s.segments.size()-5));
+    mode = "DEAD";
+  }
+  if (s.isDead) {
+    client.write("" + ID + "score"+ (s.segments.size()-5));
+    mode = "DEAD";
+  }
+  if (mode.equals("DEAD")) {
     background(0);
     fill(255, 0, 0);
     textSize(width/8);
@@ -88,10 +83,25 @@ void draw() {
   }
 }
 
+public void openingScreen() {
+  b.display();
+  String serverMessage = client.readString();
+  if (serverMessage != null) {
+    if (serverMessage.indexOf("wait")<0) {
+      println(serverMessage);
+      b.changeText("Play");
+      mode = "GAMEPLAY";
+      
+    }
+  } else {
+    b.changeText("Waiting");
+  }
+}
+
 public void resetBoard() {
-  mode = 2;
+  mode = "GAMEPLAY";
   s = new SnakeBody((int)(width/40)*20, (int)(height/40)*20, 0, 20, c);
-  s2 = new SnakeBody((int)(width/30)*20, (int)(height/30)*20, 0, 20, c);
+  //s2 = new SnakeBody((int)(width/30)*20, (int)(height/30)*20, 0, 20, c);
   a = new Apple(((int)random((width/20)-1))*20+20, ((int)random((height/20)-1))*20+20, 0, 20);
 }
 
@@ -117,30 +127,32 @@ void checkKeys() {
       //s.turnRight();
       client.write(""+ID+"right"+"\n");
     }
+  }
+}
 
-    String command = client.readString();
-    if (command!=null) {
-      println(command);
-      if (command.indexOf("up")>0) {
-        println("GOING UP");
-        s.turnUp();
-        s2.turnUp();
-      }
-      if (command.indexOf("left")>0) {
-        println("GOING LEFT");
-        s.turnLeft();
-        s2.turnLeft();
-      }
-      if (command.indexOf("down")>0) {
-        println("GOING DOWN");
-        s.turnDown();
-        s2.turnDown();
-      }
-      if (command.indexOf("right")>0) {
-        println("GOING RIGHT");
-        s.turnRight();
-        s2.turnRight();
-      }
+void readServer() {
+  String command = client.readString();
+  if (command!=null) {
+    println(command);
+    if (command.indexOf("up")>0 && int(command.substring(0, command.indexOf("up"))) == ID) {
+      println("GOING UP");
+      s.turnUp();
+      //s2.turnUp();
+    }
+    if (command.indexOf("left")>0 && int(command.substring(0, command.indexOf("left"))) == ID) {
+      println("GOING LEFT");
+      s.turnLeft();
+      //s2.turnLeft();
+    }
+    if (command.indexOf("down")>0 && int(command.substring(0, command.indexOf("down"))) == ID) {
+      println("GOING DOWN");
+      s.turnDown();
+      //s2.turnDown();
+    }
+    if (command.indexOf("right")>0 && int(command.substring(0, command.indexOf("right"))) == ID) {
+      println("GOING RIGHT");
+      s.turnRight();
+      //s2.turnRight();
     }
   }
 }

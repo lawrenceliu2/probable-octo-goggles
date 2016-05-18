@@ -23,6 +23,10 @@ class Button {
     text(label, x + (w / 2), y + (h / 2));
   }
 
+  void changeText(String text) {
+    label = text;
+  }
+  
   boolean isClicked() {
     return mousePressed && mouseX > x && mouseX < (x + w) && mouseY > y && mouseY < (y + h);
   }
