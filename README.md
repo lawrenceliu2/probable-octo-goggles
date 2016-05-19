@@ -23,7 +23,7 @@
 - DAN: Made a ghost snake to test server sided steering. It works
 
 - DAN: Also fixed assignment of -1 ID's
-- 
+
 <b>5/17/16</b>
 
 -
