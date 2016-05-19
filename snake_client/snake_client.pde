@@ -6,6 +6,7 @@ int data[];
 int ID;
 
 SnakeBody s;//, s2;
+ArrayList<SnakeBody> otherSnakes;
 Apple a;
 String mode;
 float maxPlaneX, minPlaneX, maxPlaneY, minPlaneY;
@@ -16,7 +17,9 @@ void setup() {
 
   size(500, 500, P3D);
   background(0);
-  client = new Client(this, "149.89.161.118", 1234);
+  client = new Client(this, "192.168.1.8", 1234);
+  //println(this);
+  otherSnakes = new ArrayList<SnakeBody>();
   //String  joinConfirmed = client.readString();
   //s2 = new SnakeBody((int)(width/30)*20, (int)(height/30)*20, 0, 20, c);
   a = new Apple(((int)random((width/20)-1))*20+20, ((int)random((height/20)-1))*20+20, 0, 20); 
@@ -43,6 +46,12 @@ void draw() {
     //s2.display();
     if (frameCount%4==0) {
       s.move();
+      for (SnakeBody snake : otherSnakes) {
+        snake.move();
+      }
+    }
+    for (SnakeBody snake : otherSnakes) {
+      snake.display();
     }
     s.display();
 
@@ -85,11 +94,22 @@ public void openingScreen() {
     if (serverMessage.indexOf("wait")<0) {
       if (serverMessage.indexOf("join")>0) {
         ID = int(serverMessage.substring(0, serverMessage.indexOf("join")));
-        c =  color(100+155*sin(ID), 100+155*cos(ID), 100+155*tan(ID));
-        s = new SnakeBody((int)(width/40)*20, (int)(height/40)*20, 0, 20, c);
+        //c =  color(100+155*sin(ID), 100+155*cos(ID), 100+155*tan(ID));
+        s = new SnakeBody((int)(width/40)*20, (int)(height/100 * ID)*20, 0, 20, ID);
       } else {
-        client.write((int)(int(serverMessage.substring(0, serverMessage.indexOf("play")))*20));
-        s = new SnakeBody((int)(width/40)*20, (int)(int(serverMessage.substring(0, serverMessage.indexOf("play")))*20), 0, 20, c);
+        int totalPlayers = int(serverMessage.substring(0, serverMessage.indexOf("play")));
+        println(totalPlayers);
+        int playerID = 1; 
+        while (playerID <= totalPlayers) {
+          if (playerID != ID) {
+            otherSnakes.add(new SnakeBody((int)(width/40)*20, (int)(height/100 * playerID)*20, 0, 20, playerID));
+            playerID++;
+          } else {
+            playerID++;
+          }
+        }
+        //client.write((int)(int(serverMessage.substring(0, serverMessage.indexOf("play")))*20));
+        s = new SnakeBody((int)(width/40)*20, (int)(int(serverMessage.substring(0, serverMessage.indexOf("play")))*20), 0, 20, ID);
         b.changeText("Play");
         mode = "GAMEPLAY";
       }
@@ -101,7 +121,7 @@ public void openingScreen() {
 
 public void resetBoard() {
   mode = "GAMEPLAY";
-  s = new SnakeBody((int)(width/40)*20, (int)(height/40)*20, 0, 20, c);
+  s = new SnakeBody((int)(width/40)*20, (int)(height/40)*20, 0, 20, ID);
   //s2 = new SnakeBody((int)(width/30)*20, (int)(height/30)*20, 0, 20, c);
   a = new Apple(((int)random((width/20)-1))*20+20, ((int)random((height/20)-1))*20+20, 0, 20);
 }

@@ -62,7 +62,7 @@ void serverEvent(Server someserver, Client aclient) {
   //s.write(joinRequest);
 }
 
-void disconnectEvent(Client aclient) {
+/*void disconnectEvent(Client aclient) {
   connectedClients--;
   println("Client disconnect\nConnected clients: " + connectedClients);
-}
+}*/
