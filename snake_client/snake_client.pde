@@ -134,19 +134,19 @@ void checkKeys() {
   if (keyPressed) {
     if (key == 'w' && s.dy!= 1) {
       //s.turnUp();
-      client.write(""+ID+"up"+"\n");
+      client.write(""+ID+":up"+"\n");
     }
     if (key == 'a' && s.dx != 1) {
       //s.turnLeft();
-      client.write(""+ID+"left"+"\n");
+      client.write(""+ID+":left"+"\n");
     }
     if (key == 's' && s.dy != -1) {
       //s.turnDown();
-      client.write(""+ID+"down"+"\n");
+      client.write(""+ID+":down"+"\n");
     }
     if (key == 'd' && s.dx != -1) {
       //s.turnRight();
-      client.write(""+ID+"right"+"\n");
+      client.write(""+ID+":right"+"\n");
     }
   }
 }
@@ -154,25 +154,27 @@ void checkKeys() {
 void readServer() {
   String command = client.readString();
   if (command!=null) {
-    println(command);
-    if (command.indexOf("play")>0) {
+    int target = 0;
+    if (command.indexOf(":")>0) {
+      target = int(command.substring(0, command.indexOf(":")));
     }
-    if (command.indexOf("up")>0 && int(command.substring(0, command.indexOf("up"))) == ID) {
+    println(command);
+    if (command.indexOf("up")>0 && target==ID) {//int(command.substring(0, command.indexOf(":up"))) == ID) {
       println("GOING UP");
       s.turnUp();
       //s2.turnUp();
     }
-    if (command.indexOf("left")>0 && int(command.substring(0, command.indexOf("left"))) == ID) {
+    if (command.indexOf("left")>0 && target==ID) {//int(command.substring(0, command.indexOf(":left"))) == ID) {
       println("GOING LEFT");
       s.turnLeft();
       //s2.turnLeft();
     }
-    if (command.indexOf("down")>0 && int(command.substring(0, command.indexOf("down"))) == ID) {
+    if (command.indexOf("down")>0 && target==ID) {//int(command.substring(0, command.indexOf(":down"))) == ID) {
       println("GOING DOWN");
       s.turnDown();
       //s2.turnDown();
     }
-    if (command.indexOf("right")>0 && int(command.substring(0, command.indexOf("right"))) == ID) {
+    if (command.indexOf("right")>0 && target==ID) {//int(command.substring(0, command.indexOf(":right"))) == ID) {
       println("GOING RIGHT");
       s.turnRight();
       //s2.turnRight();
