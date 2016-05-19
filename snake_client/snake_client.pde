@@ -6,7 +6,8 @@ int data[];
 int ID;
 
 SnakeBody s;//, s2;
-ArrayList<SnakeBody> otherSnakes;
+//ArrayList<SnakeBody> otherSnakes;
+SnakeBody[] otherSnakes;
 Apple a;
 String mode;
 float maxPlaneX, minPlaneX, maxPlaneY, minPlaneY;
@@ -19,7 +20,7 @@ void setup() {
   background(0);
   client = new Client(this, "192.168.1.8", 1234);
   //println(this);
-  otherSnakes = new ArrayList<SnakeBody>();
+  otherSnakes = new SnakeBody[0];
   //String  joinConfirmed = client.readString();
   //s2 = new SnakeBody((int)(width/30)*20, (int)(height/30)*20, 0, 20, c);
   a = new Apple(((int)random((width/20)-1))*20+20, ((int)random((height/20)-1))*20+20, 0, 20); 
@@ -44,16 +45,22 @@ void draw() {
 
     //s2.move();
     //s2.display();
+
     if (frameCount%4==0) {
       s.move();
-      for (SnakeBody snake : otherSnakes) {
-        snake.move();
+      for (int i = 0; i < otherSnakes.length; i++) {
+        if (otherSnakes[i]!=null) {
+          otherSnakes[i].move();
+        }
       }
     }
-    for (SnakeBody snake : otherSnakes) {
-      snake.display();
-    }
+
     s.display();
+    for (int i = 0; i < otherSnakes.length; i++) {
+      if (otherSnakes[i]!=null) {
+        otherSnakes[i].display();
+      }
+    }
 
     if (s.ate(a) /*|| s2.ate(a)*/) {
       a.move(((int)random((width/20)-1))*20+20, ((int)random((height/20)-1))*20+20, 0); 
@@ -99,10 +106,11 @@ public void openingScreen() {
       } else {
         int totalPlayers = int(serverMessage.substring(0, serverMessage.indexOf("play")));
         println(totalPlayers);
+        otherSnakes = new SnakeBody[totalPlayers];
         int playerID = 1; 
-        while (playerID <= totalPlayers) {
-          if (playerID != ID) {
-            otherSnakes.add(new SnakeBody((int)(width/40)*20, (int)(height/100 * playerID)*20, 0, 20, playerID));
+        while (playerID < totalPlayers) {
+          if (playerID-1 != ID) {
+            otherSnakes[playerID-1] = (new SnakeBody((int)(width/40)*20, (int)(height/100 * playerID)*20, 0, 20, playerID));
             playerID++;
           } else {
             playerID++;
@@ -159,9 +167,13 @@ void readServer() {
       target = int(command.substring(0, command.indexOf(":")));
     }
     println(command);
-    if (command.indexOf("up")>0 && target==ID) {//int(command.substring(0, command.indexOf(":up"))) == ID) {
+    if (command.indexOf("up")>0) {//&& target==ID) {//int(command.substring(0, command.indexOf(":up"))) == ID) {
       println("GOING UP");
-      s.turnUp();
+      if (target==ID) {
+        s.turnUp();
+      } else {
+        otherSnakes[target].turnUp();
+      }
       //s2.turnUp();
     }
     if (command.indexOf("left")>0 && target==ID) {//int(command.substring(0, command.indexOf(":left"))) == ID) {
