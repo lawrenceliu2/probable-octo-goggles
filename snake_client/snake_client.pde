@@ -67,10 +67,10 @@ void draw() {
     fill(255, 0, 0);
     textSize(width/8);
     textAlign(CENTER, CENTER);
-    text("YOU LOSE", width/2, height/3);
+    text("GAME OVER", width/2, height/3);
     textSize(25);
     text("Score: " + (s.segments.size()-5), width/2, height/2);
-    b = new Button("Play Again", width/4, 3 * height/4, width/2, height/8);
+    b = new Button("Play Again?", width/4, 3 * height/4, width/2, height/8);
     b.display();
     if (b.isClicked()) {
       exit();

@@ -23,13 +23,14 @@ class Button {
     textAlign(CENTER, CENTER);
     fill(0);
     if (label>0) {
-      text(label, x + (w / 2), y + (h / 2));
+      text("Start Game", x + (w / 2), y + (h / 2));
     } else if (label == 0) {
       text("Waiting", x + (w/2), y + (h/2));
     } else {
       text("Playing", x + (w/2), y + (h/2));
     }
   }
+  
 
   void setValue(int value) {
     label = value;
