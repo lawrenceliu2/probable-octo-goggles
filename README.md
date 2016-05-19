@@ -23,3 +23,11 @@
 - DAN: Made a ghost snake to test server sided steering. It works
 
 - DAN: Also fixed assignment of -1 ID's
+- 
+<b>5/17/16</b>
+
+-
+
+<b>5/18/16</b>
+
+-Server now relays more useful information such as how many snakes are connected, color of each, and how they are moving.
