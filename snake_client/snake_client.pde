@@ -16,16 +16,9 @@ void setup() {
 
   size(500, 500, P3D);
   background(0);
-<<<<<<< HEAD
   client = new Client(this, "127.0.0.1", 1234);
-  ID = client.read();
-  c =  color(random(255/ID), random(255/ID), random(255/ID));
-  s = new SnakeBody((int)(width/40)*20, (int)(height/40)*20, 0, 20, c);
-=======
-  client = new Client(this, "149.89.161.118", 1234);
   //String  joinConfirmed = client.readString();
   //s2 = new SnakeBody((int)(width/30)*20, (int)(height/30)*20, 0, 20, c);
->>>>>>> Dan-Dev
   a = new Apple(((int)random((width/20)-1))*20+20, ((int)random((height/20)-1))*20+20, 0, 20); 
   b = new Button("PLAY", width/4, height/4, width/2, height/2);
   mode = "PLAYBUTTON";
