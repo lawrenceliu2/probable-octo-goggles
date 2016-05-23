@@ -34,7 +34,7 @@ void draw() {
         for (int i = 1; i <= connectedClients; i++){
           c = color(100+155*sin(Integer.parseInt(data.substring(0,data.indexOf(":")))), 
                     100+155*cos(Integer.parseInt(data.substring(0,data.indexOf(":")))),
-                    100+155*tan(Integer.parseInt(data.substring(0,data.indexOf(":"))))));
+                    100+155*tan(Integer.parseInt(data.substring(0,data.indexOf(":")))));
           textSize(width/25);
           println(data);
           fill(c);
