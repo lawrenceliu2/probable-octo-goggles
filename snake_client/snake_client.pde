@@ -17,10 +17,9 @@ color c;
 void setup() {
 
   size(500, 500, P3D);
+  surface.setResizable(true);
   background(0);
-  client = new Client(this, "192.168.1.8", 1234);
-  //println(this);
-  otherSnakes = new SnakeBody[0];
+  client = new Client(this, "127.0.0.1", 1234);
   //String  joinConfirmed = client.readString();
   //s2 = new SnakeBody((int)(width/30)*20, (int)(height/30)*20, 0, 20, c);
   a = new Apple(((int)random((width/20)-1))*20+20, ((int)random((height/20)-1))*20+20, 0, 20); 
@@ -83,10 +82,10 @@ void draw() {
     fill(255, 0, 0);
     textSize(width/8);
     textAlign(CENTER, CENTER);
-    text("YOU LOSE", width/2, height/3);
+    text("GAME OVER", width/2, height/3);
     textSize(25);
     text("Score: " + (s.segments.size()-5), width/2, height/2);
-    b = new Button("Play Again", width/4, 3 * height/4, width/2, height/8);
+    b = new Button("Play Again?", width/4, 3 * height/4, width/2, height/8);
     b.display();
     if (b.isClicked()) {
       exit();
