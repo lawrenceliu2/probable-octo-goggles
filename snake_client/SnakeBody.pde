@@ -4,8 +4,12 @@ public class SnakeBody {
   boolean isDead;
   SnakeBit head;
   float dx, dy, dz;
+  int ID;
+  color c;
 
-  SnakeBody(float x, float y, float z, float size, color c) {
+  SnakeBody(float x, float y, float z, float size, int ID) {
+    this.ID = ID;
+    c = color(100+155*sin(ID), 100+155*cos(ID), 100+155*tan(ID));
     this.dx=1;
     this.size = size;
     head = new SnakeBit(x, y, z, size, c);
