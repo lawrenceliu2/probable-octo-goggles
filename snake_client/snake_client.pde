@@ -22,6 +22,7 @@ void setup() {
   client = new Client(this, "149.89.161.118", 1234);
   //String  joinConfirmed = client.readString();
   //s2 = new SnakeBody((int)(width/30)*20, (int)(height/30)*20, 0, 20, c);
+  //dggde
   a = new Apple(((int)random((width/20)-1))*20+20, ((int)random((height/20)-1))*20+20, 0, 20); 
   b = new Button("PLAY", width/4, height/4, width/2, height/2);
   mode = "PLAYBUTTON";
