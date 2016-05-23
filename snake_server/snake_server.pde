@@ -9,7 +9,6 @@ void setup() {
   size(500, 500);
   s = new Server(this, 1234);
   textAlign(CENTER, CENTER);
-  textSize(width/4);
   mode = "WAITING";
   connectedClients=0;
   playButton = new Button(connectedClients, width/3, height/15, width/3, height/3);
@@ -22,6 +21,7 @@ void draw() {
   textSize(width/20);
   text("Connected Snakes", width/2, height/2-30);
   if (mode == "PLAYING") {
+    textSize(width/2);
     playButton.display();
     if (connectedClients==0) {
       mode = "WAITING";
@@ -30,16 +30,20 @@ void draw() {
     if (thisClient!=null) {
       String data = thisClient.readString();
       if (data!=null && data.length() > 1) {
-                println(data);
-        for (int i = 1; i <= connectedClients; i++){
-          c = color(100+155*sin(Integer.parseInt(data.substring(0,1))), 
-                  100+155*cos(Integer.parseInt(data.substring(0,1))),
-                  100+155*tan(Integer.parseInt(data.substring(0,1))));
-        textSize(width/25);
         println(data);
+        for (int i = 1; i <= connectedClients; i++){
+          c = color(100+155*sin(Integer.parseInt(data.substring(0,data.indexOf(":")))), 
+                    100+155*cos(Integer.parseInt(data.substring(0,data.indexOf(":")))),
+                    100+155*tan(Integer.parseInt(data.substring(0,data.indexOf(":"))))));
+          textSize(width/25);
+          println(data);
           fill(c);
-          text("Snake"+data.substring(0,1)+" is moving "+data.substring(1), width/2, height/2 + i * 20);
-          s.write(data);
+          if (data.substring(1,2).equals("s")){
+            text("Snake"+data.substring(0,1)+" died! Score: "+data.substring(6,7), width/2, height/2 + i * 20);
+          }else{
+            text("Snake"+data.substring(0,1)+" is moving "+data.substring(1), width/2, height/2 + i * 20);
+            s.write(data);
+          }
         }
       }
     }
@@ -55,9 +59,7 @@ void draw() {
     }
   } else if (mode == "WAITING") {
     for (int i = 1; i <= connectedClients; i++){
-      if (c==0){
-        c=255;
-      }
+      c=255;
       fill (c);
       textSize(width/25);
       text("Snake"+i, width/2, height/2 + (i - 1) * 20);
@@ -69,6 +71,7 @@ void draw() {
         s.write("wait");
       }
     }
+    textSize(width/2);
     playButton.setValue(connectedClients);
     playButton.display();
     //
