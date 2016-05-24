@@ -17,20 +17,11 @@ color c;
 void setup() {
 
   size(500, 500, P3D);
-  surface.setResizable(true);
+  //surface.setResizable(true);
   background(0);
-<<<<<<< HEAD
-<<<<<<< HEAD
   client = new Client(this, "127.0.0.1", 1234);
-=======
-  client = new Client(this, "149.89.161.118", 1234);
->>>>>>> Dan-Dev
-=======
-  client = new Client(this, "127.0.0.1", 1234);
->>>>>>> parent of af89460... testing  pushing
   //String  joinConfirmed = client.readString();
   //s2 = new SnakeBody((int)(width/30)*20, (int)(height/30)*20, 0, 20, c);
-  //dggde
   a = new Apple(((int)random((width/20)-1))*20+20, ((int)random((height/20)-1))*20+20, 0, 20); 
   b = new Button("PLAY", width/4, height/4, width/2, height/2);
   mode = "PLAYBUTTON";

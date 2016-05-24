@@ -32,16 +32,18 @@ void draw() {
       if (data!=null && data.length() > 1) {
         println(data);
         for (int i = 1; i <= connectedClients; i++){
-          c = color(100+155*sin(Integer.parseInt(data.substring(0,data.indexOf(":")))), 
-                    100+155*cos(Integer.parseInt(data.substring(0,data.indexOf(":")))),
-                    100+155*tan(Integer.parseInt(data.substring(0,data.indexOf(":"))))));
+          if (data.indexOf(":") != -1){
+            c = color(100+155*sin(Integer.parseInt(data.substring(0,data.indexOf(":")))), 
+                      100+155*cos(Integer.parseInt(data.substring(0,data.indexOf(":")))),
+                      100+155*tan(Integer.parseInt(data.substring(0,data.indexOf(":")))));
+          }
           textSize(width/25);
           println(data);
           fill(c);
           if (data.substring(1,2).equals("s")){
-            text("Snake"+data.substring(0,1)+" died! Score: "+data.substring(6,7), width/2, height/2 + i * 20);
+            text("Snake"+data.substring(0,1)+" died! Score: "+data.substring(6), width/2, height/2 + i * 20);
           }else{
-            text("Snake"+data.substring(0,1)+" is moving "+data.substring(1), width/2, height/2 + i * 20);
+            text("Snake"+data.substring(0,1)+" is moving "+data.substring(data.indexOf(":")+1), width/2, height/2 + i * 20);
             s.write(data);
           }
         }

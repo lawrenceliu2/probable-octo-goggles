@@ -14,7 +14,7 @@
 
 <b>5/16/16</b>
 
--Bug: On school computers, the game flashes the game over screen and the snake is unmovable, even though commands are being entered. Client also not connected to server (Daniel managed to actually move his snake but the game over screen persists) Same on Lawrence's computer but game over screen disappears.
+-NEW BUG: On school computers, the game flashes the game over screen and the snake is unmovable, even though commands are being entered. Client also not connected to server (Daniel managed to actually move his snake but the game over screen persists) Same on Lawrence's computer but game over screen disappears.
 
 -Bug report: The first time Lawrence opened the server and client, said bug occured. However, after restarting both, the game played as usual with no bugs. After restarting yet again, the bug appeared.
 
@@ -48,9 +48,7 @@
 
 <b>5/22/16</b>
 
--More server text tweaking, flashing text should not occur for only one player.
-
--Next server update: Change text after player eats an apple.
+-
 
 <b>5/23/16</b>
 
