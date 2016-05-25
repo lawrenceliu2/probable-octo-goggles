@@ -65,6 +65,7 @@ void draw() {
       a.move(((int)random((width/20)-1))*20+20, ((int)random((height/20)-1))*20+20, 0); 
       s.grow();
       //s2.grow();
+      //Write to client that something was eaten?
     }
     a.display();
   }

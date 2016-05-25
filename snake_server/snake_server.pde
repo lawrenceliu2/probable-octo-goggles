@@ -47,6 +47,9 @@ void draw() {
             s.write(data);
           }
         }
+        /*if (client sends that the apple was eaten){
+          choose a location not currently occupied and set the apple there?
+        }*/
       }
     }
     else{
