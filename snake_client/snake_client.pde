@@ -1,4 +1,4 @@
-import processing.net.*;
+import processing.net.*; //<>//
 
 Client client;
 String input;
@@ -14,19 +14,27 @@ float maxPlaneX, minPlaneX, maxPlaneY, minPlaneY;
 Button b;
 color c;
 
+void wrote(Object stuff) {
+ println("Wrote: " + stuff + " to server"); 
+}
+
+void read(Object stuff) {
+  println("Read: " + stuff + " from server");
+}
 void setup() {
 
   size(500, 500, P3D);
   surface.setResizable(true);
   background(0);
-  client = new Client(this, "149.89.161.118", 1234);
+  ID = int(random(10000));
+  println(ID);
+  client = new Client(this, "127.0.0.1", 1234);
   //String  joinConfirmed = client.readString();
   //s2 = new SnakeBody((int)(width/30)*20, (int)(height/30)*20, 0, 20, c);
   //dggde
   a = new Apple(((int)random((width/20)-1))*20+20, ((int)random((height/20)-1))*20+20, 0, 20); 
   b = new Button("PLAY", width/4, height/4, width/2, height/2);
   mode = "PLAYBUTTON";
-  ID = -1;
 }
 
 void draw() {
@@ -47,7 +55,7 @@ void draw() {
     //s2.move();
     //s2.display();
 
-    if (frameCount%4==0) {
+    if (frameCount%6==0) {
       s.move();
       for (int i = 0; i < otherSnakes.length; i++) {
         if (otherSnakes[i]!=null) {
@@ -72,10 +80,12 @@ void draw() {
   }
   if (!inBounds()) {
     client.write("" + ID + "score"+ (s.segments.size()-5));
+    wrote("" + ID + "score"+ (s.segments.size()-5));
     mode = "DEAD";
   }
   if (s.isDead) {
     client.write("" + ID + "score"+ (s.segments.size()-5));
+    wrote("" + ID + "score"+ (s.segments.size()-5));
     s.isDead = !s.isDead;
     mode = "DEAD";
   }
@@ -97,7 +107,10 @@ void draw() {
 
 public void openingScreen() {
   b.display();
+  client.write(ID);
+  wrote(ID);
   String serverMessage = client.readString();
+  println(serverMessage);
   if (serverMessage != null) {
     if (serverMessage.indexOf("wait")<0) {
       if (serverMessage.indexOf("join")>0 && ID == -1) {
