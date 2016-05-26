@@ -40,16 +40,22 @@ void draw() {
           textSize(width/25);
           println(data);
           fill(c);
-          if (data.substring(1,2).equals("s")){
-            text("Snake"+data.substring(0,1)+" died! Score: "+data.substring(6), width/2, height/2 + i * 20);
+          if (data.indexOf("ate")>0){
+            //println("I got here");
+            text("Snake"+ data.substring(0,1) + " ate an apple!", width/2, height/2 + i * 20);
+            //println("I got here too");
+            s.write("" + ((int)random((width/20)-1)*20+20) + ","
+                    + ((int)random((width/20)-1)*20+20) + "."
+                    + ((int)random((width/20)-1)*20+20));
+            //println("I got here too!!!");
+          }
+          else if (data.substring(1,2).equals("s")){
+            text("Snake"+data.substring(0,1) + " died! Score: "+data.substring(6), width/2, height/2 + i * 20);
           }else{
-            text("Snake"+data.substring(0,1)+" is moving "+data.substring(data.indexOf(":")+1), width/2, height/2 + i * 20);
+            text("Snake"+data.substring(0,1) + " is moving "+data.substring(data.indexOf(":")+1), width/2, height/2 + i * 20);
             s.write(data);
           }
         }
-        /*if (client sends that the apple was eaten){
-          choose a location not currently occupied and set the apple there?
-        }*/
       }
     }
     else{

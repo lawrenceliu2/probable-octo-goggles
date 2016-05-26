@@ -1,7 +1,7 @@
 import processing.net.*;
 
 Client client;
-String input;
+String input, serverOutput;
 int data[];
 int ID;
 
@@ -25,6 +25,7 @@ void setup() {
   a = new Apple(((int)random((width/20)-1))*20+20, ((int)random((height/20)-1))*20+20, 0, 20); 
   b = new Button("PLAY", width/4, height/4, width/2, height/2);
   mode = "PLAYBUTTON";
+  serverOutput = "";
 }
 
 void draw() {
@@ -62,10 +63,13 @@ void draw() {
     }
 
     if (s.ate(a) /*|| s2.ate(a)*/) {
-      a.move(((int)random((width/20)-1))*20+20, ((int)random((height/20)-1))*20+20, 0); 
+      client.write("" + ID + "ate");
+      serverOutput = client.readString();
+      println(serverOutput);
+      a.move(Integer.parseInt(serverOutput.substring(0,serverOutput.indexOf(","))),
+             Integer.parseInt(serverOutput.substring(serverOutput.indexOf(",")+1, serverOutput.indexOf("."))),
+             Integer.parseInt(serverOutput.substring(serverOutput.indexOf(".")+1)));
       s.grow();
-      //s2.grow();
-      //Write to client that something was eaten?
     }
     a.display();
   }
