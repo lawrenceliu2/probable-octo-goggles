@@ -26,6 +26,7 @@ void setup() {
   a = new Apple(((int)random((width/20)-1))*20+20, ((int)random((height/20)-1))*20+20, 0, 20); 
   b = new Button("PLAY", width/4, height/4, width/2, height/2);
   mode = "PLAYBUTTON";
+  ID = -1;
 }
 
 void draw() {
@@ -99,7 +100,7 @@ public void openingScreen() {
   String serverMessage = client.readString();
   if (serverMessage != null) {
     if (serverMessage.indexOf("wait")<0) {
-      if (serverMessage.indexOf("join")>0) {
+      if (serverMessage.indexOf("join")>0 && ID == -1) {
         ID = int(serverMessage.substring(0, serverMessage.indexOf("join")));
         //c =  color(100+155*sin(ID), 100+155*cos(ID), 100+155*tan(ID));
         s = new SnakeBody((int)(width/40)*20, (int)(height/100 * ID)*20, 0, 20, ID);
