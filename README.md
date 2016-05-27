@@ -68,7 +68,11 @@
 
 <b>5/26/16</b>
 
--
+- Apples are now server sided, determined by the server and appear in the same place for every client. (Tested)
+
+- Cleaned code and added a couple comments, easier to understand.
+
+- Slowed game speed.
 
 <b>5/27/16</b>
 
