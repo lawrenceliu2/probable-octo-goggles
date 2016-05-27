@@ -32,7 +32,7 @@ void draw() {
       if (data!=null && data.length() > 1) {
         println(data);
         for (int i = 1; i <= connectedClients; i++){
-          if (data.indexOf(":") != -1){
+          if (data.indexOf(":") > 0){
             c = color(100+155*sin(Integer.parseInt(data.substring(0,data.indexOf(":")))), 
                       100+155*cos(Integer.parseInt(data.substring(0,data.indexOf(":")))),
                       100+155*tan(Integer.parseInt(data.substring(0,data.indexOf(":")))));
@@ -41,18 +41,17 @@ void draw() {
           println(data);
           fill(c);
           if (data.indexOf("ate")>0){
-            //println("I got here");
             text("Snake"+ data.substring(0,1) + " ate an apple!", width/2, height/2 + i * 20);
-            //println("I got here too");
             s.write("" + ((int)random((width/20)-1)*20+20) + ","
                     + ((int)random((width/20)-1)*20+20) + "."
                     + ((int)random((width/20)-1)*20+20));
-            //println("I got here too!!!");
           }
-          else if (data.substring(1,2).equals("s")){
-            text("Snake"+data.substring(0,1) + " died! Score: "+data.substring(6), width/2, height/2 + i * 20);
-          }else{
-            text("Snake"+data.substring(0,1) + " is moving "+data.substring(data.indexOf(":")+1), width/2, height/2 + i * 20);
+          
+          else if (data.indexOf("score")>0){
+            text("Snake"+data.substring(0, data.indexOf(":")) + " died! Score: "+data.substring(data.indexOf("e")+1), width/2, height/2 + i * 20);
+          }
+          else{
+            text("Snake"+data.substring(0, data.indexOf(":")) + " is moving "+data.substring(data.indexOf(":")+1), width/2, height/2 + i * 20);
             s.write(data);
           }
         }

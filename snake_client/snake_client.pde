@@ -64,6 +64,10 @@ void draw() {
 
     if (s.ate(a) /*|| s2.ate(a)*/) {
       client.write("" + ID + "ate");
+      while (client.readString() == null){
+        serverOutput = client.readString();
+        println(serverOutput);
+      }
       serverOutput = client.readString();
       println(serverOutput);
       a.move(Integer.parseInt(serverOutput.substring(0,serverOutput.indexOf(","))),
@@ -73,15 +77,18 @@ void draw() {
     }
     a.display();
   }
+  
   if (!inBounds()) {
-    client.write("" + ID + "score"+ (s.segments.size()-5));
+    client.write("" + ID + ":score"+ (s.segments.size()-5));
     mode = "DEAD";
   }
+  
   if (s.isDead) {
-    client.write("" + ID + "score"+ (s.segments.size()-5));
+    client.write("" + ID + ":score"+ (s.segments.size()-5));
     s.isDead = !s.isDead;
     mode = "DEAD";
   }
+  
   if (mode.equals("DEAD")) {
     background(0);
     fill(255, 0, 0);
@@ -176,7 +183,8 @@ void readServer() {
       if (target==ID) {
         s.turnUp();
       } else {
-        otherSnakes[target].turnUp();
+        //otherSnakes[target].turnUp();
+        s.turnUp();
       }
       //s2.turnUp();
     }
