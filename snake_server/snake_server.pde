@@ -19,7 +19,7 @@ void setup() {
 void draw() {
   background(0);
   fill(255);
-  textSize(width/20);
+  textSize(width/18);
   text("Connected Snakes", width/2, height/2-30);
   
   if (mode == "PLAYING") {
@@ -38,9 +38,8 @@ void draw() {
         //Setup text for each client
         for (int i = 1; i <= connectedClients; i++){
           if (data.indexOf(":") > 0){
-            c = color(100+155*sin(Integer.parseInt(data.substring(0,data.indexOf(":")))), 
-                      100+155*cos(Integer.parseInt(data.substring(0,data.indexOf(":")))),
-                      100+155*tan(Integer.parseInt(data.substring(0,data.indexOf(":")))));
+            int tempID = Integer.parseInt(data.substring(0,data.indexOf(":")));
+            c = color(100+155*sin(tempID), 100+155*cos(tempID), 100+155*tan(tempID));
           }
           textSize(width/25);
           println(data);

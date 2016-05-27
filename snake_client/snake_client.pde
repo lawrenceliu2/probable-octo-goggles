@@ -4,6 +4,7 @@ Client client;
 String input, serverOutput;
 int data[];
 int ID;
+int colore;
 
 SnakeBody s;//, s2;
 //ArrayList<SnakeBody> otherSnakes;
@@ -25,6 +26,7 @@ void setup() {
   b = new Button("PLAY", width/4, height/4, width/2, height/2);
   mode = "PLAYBUTTON";
   serverOutput = "";
+  colore = color (random(255),random(255),random(255));
 }
 
 void draw() {
@@ -94,8 +96,8 @@ public void openingScreen() {
     if (serverMessage.indexOf("wait")<0) {
       if (serverMessage.indexOf("join")>0) {
         ID = int(serverMessage.substring(0, serverMessage.indexOf("join")));
-        //c =  color(100+155*sin(ID), 100+155*cos(ID), 100+155*tan(ID));
         s = new SnakeBody((int)(width/40)*20, (int)(height/100 * ID)*20, 0, 20, ID);
+        println(ID);
       } else {
         int totalPlayers = int(serverMessage.substring(0, serverMessage.indexOf("play")));
         println(totalPlayers);
@@ -117,6 +119,12 @@ public void openingScreen() {
     }
   } else {
     b.changeText("Waiting");
+    textSize(width/10);
+    fill(colore);
+    text("Welcome to Snake!", width/2, height/15);
+    textSize(width/20);
+    text("Please wait for the host to", width/2, height/7);
+    text("begin the game", width/2, height/5);
   }
 }
 
