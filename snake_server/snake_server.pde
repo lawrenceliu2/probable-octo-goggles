@@ -56,7 +56,7 @@ void draw() {
           }
         }
         if (data.indexOf("ate")>0){
-          text("Snake"+ data.substring(0,1) + " ate an apple!", width/2, height/2 + 20);
+          text("Snake"+ data.substring(0, data.indexOf(":")) + " ate an apple!", width/2, height/2 + 20);
           s.write("" + ((int)random((width/20)-1)*20+20) + ","
                   + ((int)random((width/20)-1)*20+20));
         }

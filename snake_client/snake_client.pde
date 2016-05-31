@@ -10,6 +10,7 @@ SnakeBody s;//, s2;
 //ArrayList<SnakeBody> otherSnakes;
 SnakeBody[] otherSnakes;
 Apple a;
+ArrayList <Wall> Walls;
 String mode;
 float maxPlaneX, minPlaneX, maxPlaneY, minPlaneY;
 Button b;
@@ -21,12 +22,15 @@ void setup() {
   client = new Client(this, "127.0.0.1", 1234);
   //String  joinConfirmed = client.readString();
   //s2 = new SnakeBody((int)(width/30)*20, (int)(height/30)*20, 0, 20, c);
-  a = new Apple (360, 60, 0, 20);
+  a = new Apple ((int) random((width/20)-1)*20+20, (int) random((height/20)-1)*20+20, 0, 20);
   //a = new Apple(((int)random((width/20)-1))*20+20, ((int)random((height/20)-1))*20+20, 0, 20); 
   b = new Button("PLAY", width/4, height/4, width/2, height/2);
   mode = "PLAYBUTTON";
   serverOutput = "";
   colore = color (random(255),random(255),random(255));
+  for (int i = 0; i < width/20; i++){
+    Walls.add(new Wall((int) random((width/20)-1)*20+20, 0, 0, 20));
+  }
 }
 
 void draw() {
@@ -66,7 +70,7 @@ void draw() {
 
     //If a snake eats an apple
     if (s.ate(a)) {
-      client.write("" + ID + "ate");
+      client.write("" + ID + ":ate");
       s.grow();
     }
     a.display();
@@ -119,12 +123,12 @@ public void openingScreen() {
     }
   } else {
     b.changeText("Waiting");
-    textSize(width/10);
+    /*textSize(width/10);
     fill(colore);
     text("Welcome to Snake!", width/2, height/15);
     textSize(width/20);
     text("Please wait for the host to", width/2, height/7);
-    text("begin the game", width/2, height/5);
+    text("begin the game", width/2, height/5);*/
   }
 }
 
