@@ -21,6 +21,7 @@ void wrote(Object stuff) {
 void read(Object stuff) {
   println("Read: " + stuff + " from server");
 }
+
 void setup() {
 
   size(500, 500, P3D);
@@ -79,12 +80,12 @@ void draw() {
     a.display();
   }
   if (!inBounds()) {
-    client.write("" + ID + "score"+ (s.segments.size()-5));
+    client.write("" + ID + ":score"+ (s.segments.size()-5));
     wrote("" + ID + "score"+ (s.segments.size()-5));
     mode = "DEAD";
   }
   if (s.isDead) {
-    client.write("" + ID + "score"+ (s.segments.size()-5));
+    client.write("" + ID + ":score"+ (s.segments.size()-5));
     wrote("" + ID + "score"+ (s.segments.size()-5));
     s.isDead = !s.isDead;
     mode = "DEAD";

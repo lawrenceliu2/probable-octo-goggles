@@ -4,6 +4,8 @@ Server s;
 int connectedClients, c;
 String mode;
 Button playButton;
+ArrayList<String> clientIPs;
+
 void setup() {
   size(500, 500);
   s = new Server(this, 1234);
@@ -12,6 +14,16 @@ void setup() {
   connectedClients=0;
   playButton = new Button(connectedClients, width/3, height/15, width/3, height/3);
   int c = 255;
+  clientIPs = new ArrayList<String>();
+}
+
+
+void wrote(Object stuff) {
+ println("Wrote: " + stuff + " to client"); 
+}
+
+void read(Object stuff) {
+  println("Read: " + stuff + " from client");
 }
 
 void draw() {
@@ -88,8 +100,10 @@ void draw() {
 
 void serverEvent(Server someserver, Client aclient) {
   println("New client joined with IP: " + aclient.ip());
+  clientIPs.add(aclient.ip());
+  aclient.write(aclient.ip()+":joined");
+  wrote(aclient.ip()+":joined");
   connectedClients++;
-  someserver.write("" + connectedClients + "join");
   //s.write(joinRequest);
 }
 
