@@ -28,8 +28,14 @@ void setup() {
   mode = "PLAYBUTTON";
   serverOutput = "";
   colore = color (random(255),random(255),random(255));
+  Walls = new ArrayList<Wall>();
   for (int i = 0; i < width/20; i++){
-    Walls.add(new Wall((int) random((width/20)-1)*20+20, 0, 0, 20));
+    Walls.add(new Wall(20*i, 0, 0, 20));
+    Walls.add(new Wall(20*i, height, 0, 20));
+  }
+  for (int i = 0; i < height/20; i++){
+    Walls.add(new Wall(0, 20*i, 0, 20));
+    Walls.add(new Wall(width, 20*i, 0, 20));
   }
 }
 
@@ -47,6 +53,9 @@ void draw() {
     textSize(15);
     text(s.segments.size(), 15, 15);
     background(0);
+    for (Wall blah:Walls){
+      blah.display();
+    }
 
     //s2.move();
     //s2.display();

@@ -96,7 +96,7 @@
 
 <b>5/31/16</b>
 
--
+- Added walls to the gameplay screen, may fix up graphically later.
 
 <b>6/1/16</b>
 

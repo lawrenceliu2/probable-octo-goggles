@@ -8,4 +8,12 @@ public class Wall{
     size = Size;
   }
   
+   void display() {
+   fill(255, 255, 255);
+   pushMatrix();
+   translate(x,y,z);
+   box(size);
+   popMatrix();
+ }
+ 
 }
