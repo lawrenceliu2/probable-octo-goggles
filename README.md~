@@ -74,9 +74,13 @@
 
 - Slowed game speed.
 
+- Play Again button now restarts the game, mostly just for easier debugging (don't have to stop and start again) but has potential to be used for the final version.
+
 <b>5/27/16</b>
 
--
+- Bug: Randomly, immediately after eating an apple, the snake will die. Potentially because of the delay 
+
+- Made intro screen for client prettier.
 
 <b>5/28/16</b>
 

@@ -1,4 +1,4 @@
-import processing.net.*; //<>// //<>//
+import processing.net.*;
 
 Client client;
 String input, serverOutput;
@@ -10,18 +10,11 @@ SnakeBody s;//, s2;
 //ArrayList<SnakeBody> otherSnakes;
 SnakeBody[] otherSnakes;
 Apple a;
+ArrayList <Wall> Walls;
 String mode;
 float maxPlaneX, minPlaneX, maxPlaneY, minPlaneY;
 Button b;
 color c;
-
-void wrote(Object stuff) {
-  println("Wrote: " + stuff + " to server");
-}
-
-void read(Object stuff) {
-  println("Read: " + stuff + " from server");
-}
 
 void setup() {
   size(500, 500, P3D);
@@ -29,12 +22,21 @@ void setup() {
   client = new Client(this, "127.0.0.1", 1234);
   //String  joinConfirmed = client.readString();
   //s2 = new SnakeBody((int)(width/30)*20, (int)(height/30)*20, 0, 20, c);
-  a = new Apple (360, 60, 0, 20);
+  a = new Apple ((int) random((width/20)-1)*20+20, (int) random((height/20)-1)*20+20, 0, 20);
   //a = new Apple(((int)random((width/20)-1))*20+20, ((int)random((height/20)-1))*20+20, 0, 20); 
   b = new Button("PLAY", width/4, height/4, width/2, height/2);
   mode = "PLAYBUTTON";
   serverOutput = "";
-  colore = color (random(255), random(255), random(255));
+  colore = color (random(255),random(255),random(255));
+  Walls = new ArrayList<Wall>();
+  for (int i = 0; i < width/20; i++){
+    Walls.add(new Wall(20*i, 0, 0, 20));
+    Walls.add(new Wall(20*i, height, 0, 20));
+  }
+  for (int i = 0; i < height/20; i++){
+    Walls.add(new Wall(0, 20*i, 0, 20));
+    Walls.add(new Wall(width, 20*i, 0, 20));
+  }
 }
 
 void draw() {
@@ -51,11 +53,15 @@ void draw() {
     textSize(15);
     text(s.segments.size(), 15, 15);
     background(0);
+    for (Wall blah:Walls){
+      blah.display();
+    }
 
     //s2.move();
     //s2.display();
 
-      if (frameCount%6==0) {
+    //Move each snake
+    if (frameCount%6==0) {
       s.move();
       for (int i = 0; i < otherSnakes.length; i++) {
         if (otherSnakes[i]!=null) {
@@ -73,23 +79,23 @@ void draw() {
 
     //If a snake eats an apple
     if (s.ate(a)) {
-      client.write("" + ID + "ate");
+      client.write("" + ID + ":ate");
       s.grow();
     }
     a.display();
   }
-
+  
   //When snakes die
   if (!inBounds()) {
     client.write("" + ID + ":score"+ (s.segments.size()-5));
-      mode = "DEAD";
+    mode = "DEAD";
   }
   if (s.isDead) {
     client.write("" + ID + ":score"+ (s.segments.size()-5));
-      s.isDead = !s.isDead;
+    s.isDead = !s.isDead;
     mode = "DEAD";
   }
-
+  
   if (mode.equals("DEAD")) {
     deathScreen();
   }
@@ -98,11 +104,10 @@ void draw() {
 
 public void openingScreen() {
   b.display();
-  String serverMessage = client.readStringUntil('\n');
-  read(serverMessage);
+  String serverMessage = client.readString();
   if (serverMessage != null) {
     if (serverMessage.indexOf("wait")<0) {
-      if (serverMessage.indexOf("join")>0 && ID == -1) {
+      if (serverMessage.indexOf("join")>0) {
         ID = int(serverMessage.substring(0, serverMessage.indexOf("join")));
         s = new SnakeBody((int)(width/40)*20, (int)(height/100 * ID)*20, 0, 20, ID);
         println(ID);
@@ -127,17 +132,17 @@ public void openingScreen() {
     }
   } else {
     b.changeText("Waiting");
-    textSize(width/10);
+    /*textSize(width/10);
     fill(colore);
     text("Welcome to Snake!", width/2, height/15);
     textSize(width/20);
     text("Please wait for the host to", width/2, height/7);
-    text("begin the game", width/2, height/5);
+    text("begin the game", width/2, height/5);*/
   }
 }
 
 
-public void deathScreen() {
+public void deathScreen(){
   background(0);
   fill(255, 0, 0);
   textSize(width/8);
@@ -215,10 +220,10 @@ void readServer() {
       s.turnRight();
       //s2.turnRight();
     }
-    if (command.indexOf(",") > 0) {
+    if (command.indexOf(",") > 0){
       println("MOVING APPLE");
-      a.move(Integer.parseInt(command.substring(0, command.indexOf(","))), 
-        Integer.parseInt(command.substring(command.indexOf(",")+1)), 0);
-    }
+      a.move(Integer.parseInt(command.substring(0,command.indexOf(","))),
+             Integer.parseInt(command.substring(command.indexOf(",")+1)), 0);
+    } 
   }
 }
