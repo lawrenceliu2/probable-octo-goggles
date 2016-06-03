@@ -4,6 +4,7 @@ Server s;
 int connectedClients, c;
 String mode;
 Button playButton;
+ArrayList<Integer> IDs;
 
 void setup() {
   size(500, 500);
