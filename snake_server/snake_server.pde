@@ -39,7 +39,7 @@ void draw() {
         for (int i = 1; i <= connectedClients; i++){
           if (data.indexOf(":") > 0){
             int tempID = Integer.parseInt(data.substring(0,data.indexOf(":")));
-            c = color(100+155*sin(tempID), 100+155*cos(tempID), 100+155*tan(tempID));
+            
           }
           textSize(width/25);
           println(data);

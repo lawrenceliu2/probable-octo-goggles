@@ -118,7 +118,7 @@ public void openingScreen() {
         int playerID = 1; 
         while (playerID < totalPlayers) {
           if (playerID-1 != ID) {
-            otherSnakes[playerID-1] = (new SnakeBody((int)(width/40)*20, (int)(height/100 * playerID)*20, 0, 20, playerID));
+            otherSnakes[playerID] = (new SnakeBody((int)(width/40)*20, (int)(height/100 * playerID)*20, 0, 20, playerID));
             playerID++;
           } else {
             playerID++;
@@ -132,12 +132,16 @@ public void openingScreen() {
     }
   } else {
     b.changeText("Waiting");
-    /*textSize(width/10);
+    textSize(width/10);
     fill(colore);
     text("Welcome to Snake!", width/2, height/15);
     textSize(width/20);
     text("Please wait for the host to", width/2, height/7);
-    text("begin the game", width/2, height/5);*/
+    text("begin the game", width/2, height/5);
+    c = color(100+155*sin(ID), 100+155*cos(ID), 100+155*tan(ID));
+    fill(c);
+    textSize(width/15);
+    text("This is your snake's color!", width/2, (int) (height/1.2));
   }
 }
 
