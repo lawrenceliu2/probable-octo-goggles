@@ -8,7 +8,7 @@ int colore;
 
 SnakeBody s;//, s2;
 //ArrayList<SnakeBody> otherSnakes;
-SnakeBody[] otherSnakes;
+ArrayList <SnakeBody> otherSnakes;
 Apple a;
 ArrayList <Wall> Walls;
 String mode;
@@ -63,17 +63,17 @@ void draw() {
     //Move each snake
     if (frameCount%6==0) {
       s.move();
-      for (int i = 0; i < otherSnakes.length; i++) {
-        if (otherSnakes[i]!=null) {
-          otherSnakes[i].move();
+      for (int i = 0; i < otherSnakes.size(); i++) {
+        if (otherSnakes.get(i)!=null) {
+          otherSnakes.get(i).move();
         }
       }
     }
 
     s.display();
-    for (int i = 0; i < otherSnakes.length; i++) {
-      if (otherSnakes[i]!=null) {
-        otherSnakes[i].display();
+    for (int i = 0; i < otherSnakes.size(); i++) {
+      if (otherSnakes.get(i)!=null) {
+        otherSnakes.get(i).display();
       }
     }
 
@@ -107,18 +107,18 @@ public void openingScreen() {
   String serverMessage = client.readString();
   if (serverMessage != null) {
     if (serverMessage.indexOf("wait")<0) {
-      if (serverMessage.indexOf("join")>0) {
+      if (serverMessage.indexOf("join")>0 || ID == 0) {
         ID = int(serverMessage.substring(0, serverMessage.indexOf("join")));
         s = new SnakeBody((int)(width/40)*20, (int)(height/100 * ID)*20, 0, 20, ID);
         println(ID);
       } else {
         int totalPlayers = int(serverMessage.substring(0, serverMessage.indexOf("play")));
         println(totalPlayers);
-        otherSnakes = new SnakeBody[totalPlayers];
+        otherSnakes = new ArrayList <SnakeBody>(totalPlayers);
         int playerID = 1; 
         while (playerID < totalPlayers) {
           if (playerID-1 != ID) {
-            otherSnakes[playerID] = (new SnakeBody((int)(width/40)*20, (int)(height/100 * playerID)*20, 0, 20, playerID));
+            otherSnakes.add(new SnakeBody((int)(width/40)*20, (int)(height/100 * playerID)*20, 0, 20, playerID));
             playerID++;
           } else {
             playerID++;
@@ -199,27 +199,22 @@ void readServer() {
       target = int(command.substring(0, command.indexOf(":")));
     }
     println(command);
-    if (command.indexOf("up") > 0) {//&& target==ID) {//int(command.substring(0, command.indexOf(":up"))) == ID) {
+    if (command.indexOf("up") > 0 && target==ID) {//int(command.substring(0, command.indexOf(":up"))) == ID) {
       println("GOING UP");
-      if (target==ID) {
-        s.turnUp();
-      } else {
-        //otherSnakes[target].turnUp();
-        s.turnUp();
-      }
+      s.turnUp();
       //s2.turnUp();
     }
-    if (command.indexOf("left") > 0 && target==ID) {//int(command.substring(0, command.indexOf(":left"))) == ID) {
+    if (command.indexOf("left") > 0) {//int(command.substring(0, command.indexOf(":left"))) == ID) {
       println("GOING LEFT");
       s.turnLeft();
       //s2.turnLeft();
     }
-    if (command.indexOf("down") > 0 && target==ID) {//int(command.substring(0, command.indexOf(":down"))) == ID) {
+    if (command.indexOf("down") > 0) {//int(command.substring(0, command.indexOf(":down"))) == ID) {
       println("GOING DOWN");
       s.turnDown();
       //s2.turnDown();
     }
-    if (command.indexOf("right") > 0 && target==ID) {//int(command.substring(0, command.indexOf(":right"))) == ID) {
+    if (command.indexOf("right") > 0) {//int(command.substring(0, command.indexOf(":right"))) == ID) {
       println("GOING RIGHT");
       s.turnRight();
       //s2.turnRight();
