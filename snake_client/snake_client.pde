@@ -5,6 +5,7 @@ String input, serverOutput;
 int data[];
 int ID;
 int colore;
+boolean keepId;
 
 SnakeBody s;//, s2;
 //ArrayList<SnakeBody> otherSnakes;
@@ -19,7 +20,7 @@ color c;
 void setup() {
   size(500, 500, P3D);
   background(0);
-  client = new Client(this, "127.0.0.1", 1234);
+  client = new Client(this, "149.89.161.117", 1234);
   //String  joinConfirmed = client.readString();
   //s2 = new SnakeBody((int)(width/30)*20, (int)(height/30)*20, 0, 20, c);
   a = new Apple ((int) random((width/20)-1)*20+20, (int) random((height/20)-1)*20+20, 0, 20);
@@ -27,20 +28,23 @@ void setup() {
   b = new Button("PLAY", width/4, height/4, width/2, height/2);
   mode = "PLAYBUTTON";
   serverOutput = "";
-  colore = color (random(255),random(255),random(255));
+  colore = color (random(255), random(255), random(255));
   Walls = new ArrayList<Wall>();
-  for (int i = 0; i < width/20; i++){
+  for (int i = 0; i < width/20; i++) {
     Walls.add(new Wall(20*i, 0, 0, 20));
     Walls.add(new Wall(20*i, height, 0, 20));
   }
-  for (int i = 0; i < height/20; i++){
+  for (int i = 0; i < height/20; i++) {
     Walls.add(new Wall(0, 20*i, 0, 20));
     Walls.add(new Wall(width, 20*i, 0, 20));
   }
+  keepId = false;
 }
 
 void draw() {
-
+  //if (ID) {
+    println(ID);
+  //}
   if (mode.equals("PLAYBUTTON")) {
     openingScreen();
   }
@@ -53,7 +57,7 @@ void draw() {
     textSize(15);
     text(s.segments.size(), 15, 15);
     background(0);
-    for (Wall blah:Walls){
+    for (Wall blah : Walls) {
       blah.display();
     }
 
@@ -84,7 +88,7 @@ void draw() {
     }
     a.display();
   }
-  
+
   //When snakes die
   if (!inBounds()) {
     client.write("" + ID + ":score"+ (s.segments.size()-5));
@@ -95,7 +99,7 @@ void draw() {
     s.isDead = !s.isDead;
     mode = "DEAD";
   }
-  
+
   if (mode.equals("DEAD")) {
     deathScreen();
   }
@@ -107,11 +111,12 @@ public void openingScreen() {
   String serverMessage = client.readString();
   if (serverMessage != null) {
     if (serverMessage.indexOf("wait")<0) {
-      if (serverMessage.indexOf("join")>0 || ID == 0) {
+      if (serverMessage.indexOf("join")>0 && !keepId) {
+        keepId = true;
         ID = int(serverMessage.substring(0, serverMessage.indexOf("join")));
         s = new SnakeBody((int)(width/40)*20, (int)(height/100 * ID)*20, 0, 20, ID);
         println(ID);
-      } else {
+      } else if(serverMessage.indexOf("play")>0) {
         int totalPlayers = int(serverMessage.substring(0, serverMessage.indexOf("play")));
         println(totalPlayers);
         otherSnakes = new ArrayList <SnakeBody>(totalPlayers);
@@ -146,7 +151,7 @@ public void openingScreen() {
 }
 
 
-public void deathScreen(){
+public void deathScreen() {
   background(0);
   fill(255, 0, 0);
   textSize(width/8);
@@ -219,10 +224,10 @@ void readServer() {
       s.turnRight();
       //s2.turnRight();
     }
-    if (command.indexOf(",") > 0){
+    if (command.indexOf(",") > 0) {
       println("MOVING APPLE");
-      a.move(Integer.parseInt(command.substring(0,command.indexOf(","))),
-             Integer.parseInt(command.substring(command.indexOf(",")+1)), 0);
-    } 
+      a.move(Integer.parseInt(command.substring(0, command.indexOf(","))), 
+        Integer.parseInt(command.substring(command.indexOf(",")+1)), 0);
+    }
   }
 }
