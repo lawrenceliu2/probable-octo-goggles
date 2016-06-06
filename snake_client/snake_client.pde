@@ -20,7 +20,7 @@ color c;
 void setup() {
   size(500, 500, P3D);
   background(0);
-  client = new Client(this, "149.89.161.117", 1234);
+  client = new Client(this, "149.89.161.118", 1234);
   //String  joinConfirmed = client.readString();
   //s2 = new SnakeBody((int)(width/30)*20, (int)(height/30)*20, 0, 20, c);
   a = new Apple ((int) random((width/20)-1)*20+20, (int) random((height/20)-1)*20+20, 0, 20);
@@ -43,7 +43,7 @@ void setup() {
 
 void draw() {
   //if (ID) {
-    println(ID);
+   // println(ID);
   //}
   if (mode.equals("PLAYBUTTON")) {
     openingScreen();
@@ -115,11 +115,12 @@ public void openingScreen() {
         keepId = true;
         ID = int(serverMessage.substring(0, serverMessage.indexOf("join")));
         s = new SnakeBody((int)(width/40)*20, (int)(height/100 * ID)*20, 0, 20, ID);
-        println(ID);
+        //println(ID);
       } else if(serverMessage.indexOf("play")>0) {
         int totalPlayers = int(serverMessage.substring(0, serverMessage.indexOf("play")));
-        println(totalPlayers);
-        otherSnakes = new ArrayList <SnakeBody>(totalPlayers);
+        println("Total Players: " + totalPlayers);
+        //println(totalPlayers);
+        otherSnakes = new ArrayList<SnakeBody>(totalPlayers);
         int playerID = 1; 
         while (playerID < totalPlayers) {
           if (playerID-1 != ID) {
@@ -198,10 +199,12 @@ void checkKeys() {
 
 void readServer() {
   String command = client.readString();
+  println(command);
   if (command!=null) {
     int target = 0;
     if (command.indexOf(":")>0) {
       target = int(command.substring(0, command.indexOf(":")));
+      println(target);
     }
     println(command);
     if (command.indexOf("up") > 0 && target==ID) {//int(command.substring(0, command.indexOf(":up"))) == ID) {
