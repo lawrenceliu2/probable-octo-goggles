@@ -20,7 +20,7 @@ color c;
 void setup() {
   size(500, 500, P3D);
   background(0);
-  client = new Client(this, "149.89.161.117", 1234);
+  client = new Client(this, "127.0.0.1", 1234);
   //String  joinConfirmed = client.readString();
   //s2 = new SnakeBody((int)(width/30)*20, (int)(height/30)*20, 0, 20, c);
   a = new Apple ((int) random((width/20)-1)*20+20, (int) random((height/20)-1)*20+20, 0, 20);
@@ -43,13 +43,13 @@ void setup() {
 
 void draw() {
   //if (ID) {
-    println(ID);
+  //println(ID);
   //}
   if (mode.equals("PLAYBUTTON")) {
     openingScreen();
   }
 
-  if (mode.equals("GAMEPLAY")) {
+  else if (mode.equals("GAMEPLAY")) {
     lights();
     checkKeys();
     readServer();
@@ -87,20 +87,20 @@ void draw() {
       s.grow();
     }
     a.display();
+
+    //When snakes die
+    if (!inBounds()) {
+      client.write("" + ID + ":score"+ (s.segments.size()-5));
+      mode = "DEAD";
+    }
+    if (s.isDead) {
+      client.write("" + ID + ":score"+ (s.segments.size()-5));
+      s.isDead = !s.isDead;
+      mode = "DEAD";
+    }
   }
 
-  //When snakes die
-  if (!inBounds()) {
-    client.write("" + ID + ":score"+ (s.segments.size()-5));
-    mode = "DEAD";
-  }
-  if (s.isDead) {
-    client.write("" + ID + ":score"+ (s.segments.size()-5));
-    s.isDead = !s.isDead;
-    mode = "DEAD";
-  }
-
-  if (mode.equals("DEAD")) {
+  else if (mode.equals("DEAD")) {
     deathScreen();
   }
 }
@@ -116,7 +116,7 @@ public void openingScreen() {
         ID = int(serverMessage.substring(0, serverMessage.indexOf("join")));
         s = new SnakeBody((int)(width/40)*20, (int)(height/100 * ID)*20, 0, 20, ID);
         println(ID);
-      } else if(serverMessage.indexOf("play")>0) {
+      } else if (serverMessage.indexOf("play")>0) {
         int totalPlayers = int(serverMessage.substring(0, serverMessage.indexOf("play")));
         println(totalPlayers);
         otherSnakes = new ArrayList <SnakeBody>(totalPlayers);
@@ -162,7 +162,7 @@ public void deathScreen() {
   b = new Button("Play Again?", width/4, 3 * height/4, width/2, height/8);
   b.display();
   if (b.isClicked()) {
-    resetBoard();
+    exit();
   }
 }
 
@@ -226,8 +226,12 @@ void readServer() {
     }
     if (command.indexOf(",") > 0) {
       println("MOVING APPLE");
-      a.move(Integer.parseInt(command.substring(0, command.indexOf(","))), 
-        Integer.parseInt(command.substring(command.indexOf(",")+1)), 0);
+      if (command.substring(command.indexOf(",")).indexOf(",")>0) {
+        client.write("" + ID + "ate");
+      } else {
+        a.move(Integer.parseInt(command.substring(0, command.indexOf(","))), 
+          Integer.parseInt(command.substring(command.indexOf(",")+1)), 0);
+      }
     }
   }
 }

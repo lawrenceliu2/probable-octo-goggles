@@ -45,7 +45,11 @@ void draw() {
           fill(c);
           
           //Determine what action took place
-          if (data.indexOf("ate")>0){}
+          if (data.indexOf("ate")>0 && i==1){
+            text("Snake"+ tempID + " ate an apple!", width/2, height/2 + 20);
+            s.write("" + ((int)random((width/20)-1)*20+20) + ","
+                  + ((int)random((width/20)-1)*20+20));
+          }
           else if (data.indexOf("score")>0){
             text("Snake"+ tempID + " died! Score: "+data.substring(data.indexOf("e")+1), width/2, height/2 + i * 20);
           }
@@ -53,11 +57,6 @@ void draw() {
             text("Snake"+ tempID + " is moving "+data.substring(data.indexOf(":")+1), width/2, height/2 + i * 20);
             s.write(data);
           }
-        }
-        if (data.indexOf("ate")>0){
-          text("Snake"+ tempID + " ate an apple!", width/2, height/2 + 20);
-          s.write("" + ((int)random((width/20)-1)*20+20) + ","
-                  + ((int)random((width/20)-1)*20+20));
         }
       }
     }
