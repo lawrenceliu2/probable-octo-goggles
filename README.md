@@ -74,9 +74,13 @@
 
 - Slowed game speed.
 
+- Play Again button now restarts the game, mostly just for easier debugging (don't have to stop and start again) but has potential to be used for the final version.
+
 <b>5/27/16</b>
 
--
+- Bug: Randomly, immediately after eating an apple, the snake will die. Potentially because of the delay 
+
+- Made intro screen for client prettier.
 
 <b>5/28/16</b>
 
@@ -92,7 +96,7 @@
 
 <b>5/31/16</b>
 
--
+- Added walls to the gameplay screen, may fix up graphically later.
 
 <b>6/1/16</b>
 
@@ -112,7 +116,7 @@
 
 <b>6/5/16</b>
 
--
+- Attempted to fix the hellish ID issue. No fix but some progress??
 
 <b>6/6/16</b>
 

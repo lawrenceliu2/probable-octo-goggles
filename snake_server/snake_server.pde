@@ -4,6 +4,7 @@ Server s;
 int connectedClients, c;
 String mode;
 Button playButton;
+ArrayList<Integer> IDs;
 
 void setup() {
   size(500, 500);
@@ -19,7 +20,7 @@ void setup() {
 void draw() {
   background(0);
   fill(255);
-  textSize(width/20);
+  textSize(width/18);
   text("Connected Snakes", width/2, height/2-30);
   
   if (mode == "PLAYING") {
@@ -34,32 +35,29 @@ void draw() {
       String data = thisClient.readString();
       if (data!=null && data.length() > 1) {
         println(data);
+        int tempID = Integer.parseInt(data.substring(0,data.indexOf(":")));
         
         //Setup text for each client
         for (int i = 1; i <= connectedClients; i++){
-          if (data.indexOf(":") > 0){
-            c = color(100+155*sin(Integer.parseInt(data.substring(0,data.indexOf(":")))), 
-                      100+155*cos(Integer.parseInt(data.substring(0,data.indexOf(":")))),
-                      100+155*tan(Integer.parseInt(data.substring(0,data.indexOf(":")))));
-          }
           textSize(width/25);
           println(data);
           fill(c);
           
           //Determine what action took place
-          if (data.indexOf("ate")>0){}
+          if (data.indexOf("ate")>0 && i==1){
+            text("Snake"+ tempID + " ate an apple!", width/2, height/2 + 20);
+            s.write("" + ((int)random((width/20)-1)*20+20) + ","
+                  + ((int)random((width/20)-1)*20+20));
+            //println("Sent apple coordinates");
+          }
           else if (data.indexOf("score")>0){
-            text("Snake"+data.substring(0, data.indexOf(":")) + " died! Score: "+data.substring(data.indexOf("e")+1), width/2, height/2 + i * 20);
+            text("Snake"+ tempID + " died! Score: "+data.substring(data.indexOf("e")+1), width/2, height/2 + i * 20);
+            //println("Dead snake");
           }
           else{
-            text("Snake"+data.substring(0, data.indexOf(":")) + " is moving "+data.substring(data.indexOf(":")+1), width/2, height/2 + i * 20);
+            text("Snake"+ tempID + " is moving "+data.substring(data.indexOf(":")+1), width/2, height/2 + i * 20);
             s.write(data);
           }
-        }
-        if (data.indexOf("ate")>0){
-          text("Snake"+ data.substring(0,1) + " ate an apple!", width/2, height/2 + 20);
-          s.write("" + ((int)random((width/20)-1)*20+20) + ","
-                  + ((int)random((width/20)-1)*20+20));
         }
       }
     }
