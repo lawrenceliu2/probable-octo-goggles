@@ -35,10 +35,12 @@ void draw() {
       String data = thisClient.readString();
       if (data!=null && data.length() > 1) {
         println(data);
-        int tempID = Integer.parseInt(data.substring(0,data.indexOf(":")));
+        //int tempID = Integer.parseInt(data.substring(0,data.indexOf(":")));
         
         //Setup text for each client
         for (int i = 1; i <= connectedClients; i++){
+          int tempID = Integer.parseInt(data.substring(0,data.indexOf(":")));
+          c = color(100+155*sin(tempID), 100+155*cos(tempID), 100+155*tan(tempID));
           textSize(width/25);
           println(data);
           fill(c);

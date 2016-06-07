@@ -23,7 +23,7 @@ void setup() {
   client = new Client(this, "127.0.0.1", 1234);
   //String  joinConfirmed = client.readString();
   //s2 = new SnakeBody((int)(width/30)*20, (int)(height/30)*20, 0, 20, c);
-  a = new Apple ((int) random((width/20)-1)*20+20, (int) random((height/20)-1)*20+20, 0, 20);
+  a = new Apple (width/2+10, height/2+10, 0, 20);
   //a = new Apple(((int)random((width/20)-1))*20+20, ((int)random((height/20)-1))*20+20, 0, 20); 
   b = new Button("PLAY", width/4, height/4, width/2, height/2);
   mode = "PLAYBUTTON";
@@ -97,6 +97,7 @@ void draw() {
       mode = "DEAD";
     }
   } else if (mode.equals("DEAD")) {
+    client.write("" + ID + ":score"+ (s.segments.size()-5));
     deathScreen();
   }
 }
