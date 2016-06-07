@@ -95,6 +95,14 @@ public void draw() {
       }
     }
 
+    for (int i = 0; i < snakes.size(); i++) {
+      if (snakes.get(i)!=null && i != ID-1) {
+        if (snakes.get(i).isDead) {
+          snakes.set(i, null);
+        }
+      }
+    }
+
     //If a snake eats an apple
     if (snakes.get(ID-1).ate(a)) {
       client.write("" + ID + ":ate");
@@ -214,41 +222,43 @@ public void readServer() {
       println(target);
     }
     println(command);
-    if (command.indexOf("up") > 0) {// && target==ID) {//int(command.substring(0, command.indexOf(":up"))) == ID) {
-      println("GOING UP");
-      if (command.substring(command.indexOf(":")).indexOf(":")>0) {
-        client.write("" + ID + "up");
-      } else {
-        snakes.get(target-1).turnUp();
+    if (target-1>=0) {
+      if (command.indexOf("up") > 0) {// && target==ID) {//int(command.substring(0, command.indexOf(":up"))) == ID) {
+        println("GOING UP");
+        if (command.substring(command.indexOf(":")).indexOf(":")>0) {
+          client.write("" + ID + "up");
+        } else {
+          snakes.get(target-1).turnUp();
+        }
+        //s2.turnUp();
       }
-      //s2.turnUp();
-    }
-    if (command.indexOf("left") > 0) {//int(command.substring(0, command.indexOf(":left"))) == ID) {
-      println("GOING LEFT");
-      if (command.substring(command.indexOf(":")).indexOf(":")>0) {
-        client.write("" + ID + "left");
-      } else {
-        snakes.get(target-1).turnLeft();
+      if (command.indexOf("left") > 0) {//int(command.substring(0, command.indexOf(":left"))) == ID) {
+        println("GOING LEFT");
+        if (command.substring(command.indexOf(":")).indexOf(":")>0) {
+          client.write("" + ID + "left");
+        } else {
+          snakes.get(target-1).turnLeft();
+        }
+        //s2.turnLeft();
       }
-      //s2.turnLeft();
-    }
-    if (command.indexOf("down") > 0) {//int(command.substring(0, command.indexOf(":down"))) == ID) {
-      println("GOING DOWN");
-      if (command.substring(command.indexOf(":")).indexOf(":")>0) {
-        client.write("" + ID + "down");
-      } else {
-        snakes.get(target-1).turnDown();
+      if (command.indexOf("down") > 0) {//int(command.substring(0, command.indexOf(":down"))) == ID) {
+        println("GOING DOWN");
+        if (command.substring(command.indexOf(":")).indexOf(":")>0) {
+          client.write("" + ID + "down");
+        } else {
+          snakes.get(target-1).turnDown();
+        }
+        //s2.turnDown();
       }
-      //s2.turnDown();
-    }
-    if (command.indexOf("right") > 0) {//int(command.substring(0, command.indexOf(":right"))) == ID) {
-      println("GOING RIGHT");
-      if (command.substring(command.indexOf(":")).indexOf(":")>0) {
-        client.write("" + ID + "right");
-      } else {
-        snakes.get(target-1).turnRight();
+      if (command.indexOf("right") > 0) {//int(command.substring(0, command.indexOf(":right"))) == ID) {
+        println("GOING RIGHT");
+        if (command.substring(command.indexOf(":")).indexOf(":")>0) {
+          client.write("" + ID + "right");
+        } else {
+          snakes.get(target-1).turnRight();
+        }
+        //s2.turnRight();
       }
-      //s2.turnRight();
     }
     if (command.indexOf(",") > 0) {
       println("MOVING APPLE");
