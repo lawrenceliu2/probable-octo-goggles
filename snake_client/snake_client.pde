@@ -5,11 +5,11 @@ String input, serverOutput;
 int data[];
 int ID;
 int colore;
-boolean keepId;
+boolean keepId, madeSnakes;
 
-SnakeBody s;//, s2;
+//SnakeBody s;//, s2;
 //ArrayList<SnakeBody> otherSnakes;
-ArrayList <SnakeBody> otherSnakes;
+ArrayList <SnakeBody> snakes;
 Apple a;
 ArrayList <Wall> Walls;
 String mode;
@@ -39,7 +39,9 @@ void setup() {
     Walls.add(new Wall(0, 20*i, 0, 20));
     Walls.add(new Wall(width, 20*i, 0, 20));
   }
+  snakes = new ArrayList<SnakeBody>();
   keepId = false;
+  madeSnakes = false;
 }
 
 void draw() {
@@ -51,7 +53,7 @@ void draw() {
     readServer();
 
     textSize(15);
-    text(s.segments.size(), 15, 15);
+    text(snakes.get(ID-1).segments.size(), 15, 15);
     background(0);
     for (Wall blah : Walls) {
       blah.display();
@@ -62,36 +64,34 @@ void draw() {
 
     //Move each snake
     if (frameCount%6==0) {
-      s.move();
-      for (int i = 0; i < otherSnakes.size(); i++) {
-        if (otherSnakes.get(i)!=null) {
-          otherSnakes.get(i).move();
+      for (int i = 0; i < snakes.size(); i++) {
+        if (snakes.get(i)!=null) {
+          snakes.get(i).move();
         }
       }
     }
 
-    s.display();
-    for (int i = 0; i < otherSnakes.size(); i++) {
-      if (otherSnakes.get(i)!=null) {
-        otherSnakes.get(i).display();
+    for (int i = 0; i < snakes.size(); i++) {
+      if (snakes.get(i)!=null) {
+        snakes.get(i).display();
       }
     }
 
     //If a snake eats an apple
-    if (s.ate(a)) {
+    if (snakes.get(ID-1).ate(a)) {
       client.write("" + ID + ":ate");
-      s.grow();
+      snakes.get(ID-1).grow();
     }
     a.display();
 
     //When snakes die
     if (!inBounds()) {
-      client.write("" + ID + ":score"+ (s.segments.size()-5));
+      client.write("" + ID + ":score"+ (snakes.get(ID-1).segments.size()-5));
       mode = "DEAD";
     }
-    if (s.isDead) {
-      client.write("" + ID + ":score"+ (s.segments.size()-5));
-      s.isDead = !s.isDead;
+    if (snakes.get(ID-1).isDead) {
+      client.write("" + ID + ":score"+ (snakes.get(ID-1).segments.size()-5));
+      snakes.get(ID-1).isDead = !snakes.get(ID-1).isDead;
       mode = "DEAD";
     }
   } else if (mode.equals("DEAD")) {
@@ -108,24 +108,18 @@ public void openingScreen() {
       if (serverMessage.indexOf("join")>0 && !keepId) {
         keepId = true;
         ID = int(serverMessage.substring(0, serverMessage.indexOf("join")));
-        s = new SnakeBody((int)(width/40)*20, (int)(height/100 * ID)*20, 0, 20, ID);
         println(ID);
-      } else if (serverMessage.indexOf("play")>0) {
+      } else if (serverMessage.indexOf("play")>0 && keepId && !madeSnakes) {
         int totalPlayers = int(serverMessage.substring(0, serverMessage.indexOf("play")));
         println("Total Players: " + totalPlayers);
-        //println(totalPlayers);
-        otherSnakes = new ArrayList<SnakeBody>(totalPlayers);
-        int playerID = 1; 
+        int playerID = 0; 
         while (playerID < totalPlayers) {
-          if (playerID-1 != ID) {
-            otherSnakes.add(new SnakeBody((int)(width/40)*20, (int)(height/100 * playerID)*20, 0, 20, playerID));
-            playerID++;
-          } else {
-            playerID++;
-          }
+          snakes.add(new SnakeBody((int)(width/40)*20, (int)(height/100 * (playerID+1))*20, 0, 20, playerID+1));
+          playerID++;
         }
+
         //client.write((int)(int(serverMessage.substring(0, serverMessage.indexOf("play")))*20));
-        s = new SnakeBody((int)(width/40)*20, (int)(int(serverMessage.substring(0, serverMessage.indexOf("play")))*20), 0, 20, ID);
+        //s = new SnakeBody((int)(width/40)*20, (int)(int(serverMessage.substring(0, serverMessage.indexOf("play")))*20), 0, 20, ID);
         b.changeText("Play");
         mode = "GAMEPLAY";
       }
@@ -153,7 +147,7 @@ public void deathScreen() {
   textAlign(CENTER, CENTER);
   text("GAME OVER", width/2, height/3);
   textSize(25);
-  text("Score: " + (s.segments.size()-5), width/2, height/2);
+  text("Score: " + (snakes.get(ID-1).segments.size()-5), width/2, height/2);
   b = new Button("Play Again?", width/4, 3 * height/4, width/2, height/8);
   b.display();
   if (b.isClicked()) {
@@ -164,29 +158,29 @@ public void deathScreen() {
 
 public void resetBoard() {
   mode = "GAMEPLAY";
-  s = new SnakeBody((int)(width/40)*20, (int)(height/40)*20, 0, 20, ID);
+  //s = new SnakeBody((int)(width/40)*20, (int)(height/40)*20, 0, 20, ID);
   //s2 = new SnakeBody((int)(width/30)*20, (int)(height/30)*20, 0, 20, c);
   a = new Apple(((int)random((width/20)-1))*20+20, ((int)random((height/20)-1))*20+20, 0, 20);
 }
 
 
 boolean inBounds() {
-  return s.getPosition()[0] - 20 >= 0 && s.getPosition()[0] + 20<= width && s.getPosition()[1] -20 >= 0 && s.getPosition()[1] +20 <= height;
+  return snakes.get(ID-1).getPosition()[0] - 20 >= 0 && snakes.get(ID-1).getPosition()[0] + 20<= width && snakes.get(ID-1).getPosition()[1] -20 >= 0 && snakes.get(ID-1).getPosition()[1] +20 <= height;
 }
 
 
 void checkKeys() {
   if (keyPressed) {
-    if (key == 'w' && s.dy!= 1) {
+    if (key == 'w' && snakes.get(ID-1).dy!= 1) {
       client.write(""+ID+":up"+"\n");
     }
-    if (key == 'a' && s.dx != 1) {
+    if (key == 'a' && snakes.get(ID-1).dx != 1) {
       client.write(""+ID+":left"+"\n");
     }
-    if (key == 's' && s.dy != -1) {
+    if (key == 's' && snakes.get(ID-1).dy != -1) {
       client.write(""+ID+":down"+"\n");
     }
-    if (key == 'd' && s.dx != -1) {
+    if (key == 'd' && snakes.get(ID-1).dx != -1) {
       client.write(""+ID+":right"+"\n");
     }
   }
@@ -207,7 +201,7 @@ void readServer() {
       if (command.substring(command.indexOf(":")).indexOf(":")>0) {
         client.write("" + ID + "up");
       } else {
-        s.turnUp();
+        snakes.get(target-1).turnUp();
       }
       //s2.turnUp();
     }
@@ -216,7 +210,7 @@ void readServer() {
       if (command.substring(command.indexOf(":")).indexOf(":")>0) {
         client.write("" + ID + "left");
       } else {
-        s.turnLeft();
+        snakes.get(target-1).turnLeft();
       }
       //s2.turnLeft();
     }
@@ -225,7 +219,7 @@ void readServer() {
       if (command.substring(command.indexOf(":")).indexOf(":")>0) {
         client.write("" + ID + "down");
       } else {
-        s.turnDown();
+        snakes.get(target-1).turnDown();
       }
       //s2.turnDown();
     }
@@ -234,7 +228,7 @@ void readServer() {
       if (command.substring(command.indexOf(":")).indexOf(":")>0) {
         client.write("" + ID + "right");
       } else {
-        s.turnRight();
+        snakes.get(target-1).turnRight();
       }
       //s2.turnRight();
     }
