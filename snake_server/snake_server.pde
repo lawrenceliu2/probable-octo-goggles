@@ -33,12 +33,12 @@ void draw() {
     //Wait for a client to perform an action
     if (thisClient!=null) {
       String data = thisClient.readString();
-      if (data!=null && data.length() > 1) {
+      if (data!=null && data.length() > 1 && data.indexOf("score")<0) {
         println(data);
         //int tempID = Integer.parseInt(data.substring(0,data.indexOf(":")));
         
         //Setup text for each client
-        for (int i = 1; i <= connectedClients; i++){
+        //for (int i = 1; i <= connectedClients; i++){
           int tempID = Integer.parseInt(data.substring(0,data.indexOf(":")));
           c = color(100+155*sin(tempID), 100+155*cos(tempID), 100+155*tan(tempID));
           textSize(width/25);
@@ -46,21 +46,27 @@ void draw() {
           fill(c);
           
           //Determine what action took place
-          if (data.indexOf("ate")>0 && i==1){
+          if (data.indexOf("ate")>0){
             text("Snake"+ tempID + " ate an apple!", width/2, height/2 + 20);
             s.write("" + ((int)random((width/20)-1)*20+20) + ","
                   + ((int)random((width/20)-1)*20+20));
             //println("Sent apple coordinates");
           }
-          else if (data.indexOf("score")>0){
+          /*else if (data.indexOf("score")>0){
             text("Snake"+ tempID + " died! Score: "+data.substring(data.indexOf("e")+1), width/2, height/2 + i * 20);
-            //println("Dead snake");
-          }
-          else{
-            text("Snake"+ tempID + " is moving "+data.substring(data.indexOf(":")+1), width/2, height/2 + i * 20);
+          }*/
+          else if (data.indexOf("left")>0||data.indexOf("up")>0||data.indexOf("down")>0||
+                   data.indexOf("right")>0){
+            text("Snake"+ tempID + " is moving "+data.substring(data.indexOf(":")+1), width/2, height/2 + tempID * 20);
             s.write(data);
-          }
+          //}
         }
+      }
+      if (data.indexOf("score")>0){
+        fill(255);
+        int tempID = Integer.parseInt(data.substring(0,data.indexOf(":")));
+        textSize(width/25);
+        text("Snake"+ tempID + " died! Score: "+data.substring(data.indexOf("e")+1), width/2, height/2 + tempID * 20);
       }
     }
     

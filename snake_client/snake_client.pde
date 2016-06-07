@@ -95,7 +95,7 @@ void draw() {
       mode = "DEAD";
     }
   } else if (mode.equals("DEAD")) {
-    client.write("" + ID + ":score"+ (s.segments.size()-5));
+    client.write("" + ID + ":score"+ (snakes.get(ID-1).segments.size()-5));
     deathScreen();
   }
 }
@@ -152,8 +152,7 @@ public void deathScreen() {
   b = new Button("Play Again?", width/4, 3 * height/4, width/2, height/8);
   b.display();
   if (b.isClicked()) {
-    //exit();
-    resetBoard();
+    exit();
   }
 }
 
@@ -234,13 +233,17 @@ void readServer() {
       //s2.turnRight();
     }
     if (command.indexOf(",") > 0) {
-      println("MOVING APPLE");
+      println("MOVING APPLE: "+command);
       if (command.substring(command.indexOf(",")).indexOf(",")>0) {
         client.write("" + ID + "ate");
-      } else {
+        println("did this");
+      } else if (command.indexOf(":")<0){
+        println("did that");
         a.move(Integer.parseInt(command.substring(0, command.indexOf(","))), 
           Integer.parseInt(command.substring(command.indexOf(",")+1)), 0);
       }
+    }
+    if (command.indexOf("ate") > 0){
     }
   }
 }
