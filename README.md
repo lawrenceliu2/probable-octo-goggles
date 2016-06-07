@@ -74,7 +74,7 @@
 
 - Slowed game speed.
 
-- Play Again button now restarts the game, mostly just for easier debugging (don't have to stop and start again) but has potential to be used for the final version.
+- Play Again button now restarts the game, mostly just for easier debugging (don't have to stop and start again).
 
 <b>5/27/16</b>
 
@@ -108,7 +108,9 @@
 
 <b>6/3/16</b>
 
--
+- Added text on client to show user's color.
+
+- Slight ID fix for controlling your snake.
 
 <b>6/4/16</b>
 
@@ -120,7 +122,15 @@
 
 <b>6/6/16</b>
 
--
+- Bug Fix??? The random death after eating an apple seems to be fixed... Skpetical because it didn't happen after a lot of tests at home but happened often on school computers. Maybe the code I wrote did affect it? It shouldn't have though...
+
+- Should no longer (or rarely) crash the game because of the server sending multiple messages.
+
+- Singleplayer works 99% of the time (unless server messes up and sends messages partially/combined?)
+
+- Snakes server based and game continues until all are dead.
+
+- Bug: I lied up there^^^ it is confirmed that the client moves the apple correctly but for some reason crashes... Death should not occur, as the snake is not past a wall, but it does so anyways.
 
 <b>6/7/16</b>
 
