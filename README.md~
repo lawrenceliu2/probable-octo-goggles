@@ -124,6 +124,8 @@
 
 - Bug Fix??? The random death after eating an apple seems to be fixed... Skpetical because it didn't happen after a lot of tests at home but happened often on school computers. Maybe the code I wrote did affect it? It shouldn't have though...
 
+- Should no longer (or rarely) crash the game because of the server sending multiple messages.
+
 <b>6/7/16</b>
 
 - Final Demo!!!!!

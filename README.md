@@ -126,6 +126,12 @@
 
 - Should no longer (or rarely) crash the game because of the server sending multiple messages.
 
+- Singleplayer works 99% of the time (unless server messes up and sends messages partially/combined?)
+
+- Snakes server based and game continues until all are dead.
+
+- Bug: I lied up there^^^ it is confirmed that the client moves the apple correctly but for some reason crashes... Death should not occur, as the snake is not past a wall, but it does so anyways.
+
 <b>6/7/16</b>
 
 - Final Demo!!!!!
