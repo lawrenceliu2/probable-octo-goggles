@@ -20,7 +20,8 @@ color c;
 void setup() {
   size(500, 500, P3D);
   background(0);
-  client = new Client(this, "149.89.161.118", 1234);
+
+  client = new Client(this, "127.0.0.1", 1234);
   //String  joinConfirmed = client.readString();
   //s2 = new SnakeBody((int)(width/30)*20, (int)(height/30)*20, 0, 20, c);
   a = new Apple ((int) random((width/20)-1)*20+20, (int) random((height/20)-1)*20+20, 0, 20);
@@ -42,14 +43,9 @@ void setup() {
 }
 
 void draw() {
-  //if (ID) {
-   // println(ID);
-  //}
   if (mode.equals("PLAYBUTTON")) {
     openingScreen();
-  }
-
-  if (mode.equals("GAMEPLAY")) {
+  } else if (mode.equals("GAMEPLAY")) {
     lights();
     checkKeys();
     readServer();
@@ -87,20 +83,18 @@ void draw() {
       s.grow();
     }
     a.display();
-  }
 
-  //When snakes die
-  if (!inBounds()) {
-    client.write("" + ID + ":score"+ (s.segments.size()-5));
-    mode = "DEAD";
-  }
-  if (s.isDead) {
-    client.write("" + ID + ":score"+ (s.segments.size()-5));
-    s.isDead = !s.isDead;
-    mode = "DEAD";
-  }
-
-  if (mode.equals("DEAD")) {
+    //When snakes die
+    if (!inBounds()) {
+      client.write("" + ID + ":score"+ (s.segments.size()-5));
+      mode = "DEAD";
+    }
+    if (s.isDead) {
+      client.write("" + ID + ":score"+ (s.segments.size()-5));
+      s.isDead = !s.isDead;
+      mode = "DEAD";
+    }
+  } else if (mode.equals("DEAD")) {
     deathScreen();
   }
 }
@@ -115,8 +109,8 @@ public void openingScreen() {
         keepId = true;
         ID = int(serverMessage.substring(0, serverMessage.indexOf("join")));
         s = new SnakeBody((int)(width/40)*20, (int)(height/100 * ID)*20, 0, 20, ID);
-        //println(ID);
-      } else if(serverMessage.indexOf("play")>0) {
+        println(ID);
+      } else if (serverMessage.indexOf("play")>0) {
         int totalPlayers = int(serverMessage.substring(0, serverMessage.indexOf("play")));
         println("Total Players: " + totalPlayers);
         //println(totalPlayers);
@@ -163,6 +157,7 @@ public void deathScreen() {
   b = new Button("Play Again?", width/4, 3 * height/4, width/2, height/8);
   b.display();
   if (b.isClicked()) {
+    //exit();
     resetBoard();
   }
 }
@@ -207,30 +202,50 @@ void readServer() {
       println(target);
     }
     println(command);
-    if (command.indexOf("up") > 0 && target==ID) {//int(command.substring(0, command.indexOf(":up"))) == ID) {
+    if (command.indexOf("up") > 0) {// && target==ID) {//int(command.substring(0, command.indexOf(":up"))) == ID) {
       println("GOING UP");
-      s.turnUp();
+      if (command.substring(command.indexOf(":")).indexOf(":")>0) {
+        client.write("" + ID + "up");
+      } else {
+        s.turnUp();
+      }
       //s2.turnUp();
     }
     if (command.indexOf("left") > 0) {//int(command.substring(0, command.indexOf(":left"))) == ID) {
       println("GOING LEFT");
-      s.turnLeft();
+      if (command.substring(command.indexOf(":")).indexOf(":")>0) {
+        client.write("" + ID + "left");
+      } else {
+        s.turnLeft();
+      }
       //s2.turnLeft();
     }
     if (command.indexOf("down") > 0) {//int(command.substring(0, command.indexOf(":down"))) == ID) {
       println("GOING DOWN");
-      s.turnDown();
+      if (command.substring(command.indexOf(":")).indexOf(":")>0) {
+        client.write("" + ID + "down");
+      } else {
+        s.turnDown();
+      }
       //s2.turnDown();
     }
     if (command.indexOf("right") > 0) {//int(command.substring(0, command.indexOf(":right"))) == ID) {
       println("GOING RIGHT");
-      s.turnRight();
+      if (command.substring(command.indexOf(":")).indexOf(":")>0) {
+        client.write("" + ID + "right");
+      } else {
+        s.turnRight();
+      }
       //s2.turnRight();
     }
     if (command.indexOf(",") > 0) {
       println("MOVING APPLE");
-      a.move(Integer.parseInt(command.substring(0, command.indexOf(","))), 
-        Integer.parseInt(command.substring(command.indexOf(",")+1)), 0);
+      if (command.substring(command.indexOf(",")).indexOf(",")>0) {
+        client.write("" + ID + "ate");
+      } else {
+        a.move(Integer.parseInt(command.substring(0, command.indexOf(","))), 
+          Integer.parseInt(command.substring(command.indexOf(",")+1)), 0);
+      }
     }
   }
 }
