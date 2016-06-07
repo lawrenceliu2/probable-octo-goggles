@@ -39,7 +39,6 @@ void draw() {
         
         //Setup text for each client
         for (int i = 1; i <= connectedClients; i++){
-          //int tempID = Integer.parseInt(data.substring(0,data.indexOf(":")));
           textSize(width/25);
           println(data);
           fill(c);
@@ -49,9 +48,11 @@ void draw() {
             text("Snake"+ tempID + " ate an apple!", width/2, height/2 + 20);
             s.write("" + ((int)random((width/20)-1)*20+20) + ","
                   + ((int)random((width/20)-1)*20+20));
+            //println("Sent apple coordinates");
           }
           else if (data.indexOf("score")>0){
             text("Snake"+ tempID + " died! Score: "+data.substring(data.indexOf("e")+1), width/2, height/2 + i * 20);
+            //println("Dead snake");
           }
           else{
             text("Snake"+ tempID + " is moving "+data.substring(data.indexOf(":")+1), width/2, height/2 + i * 20);

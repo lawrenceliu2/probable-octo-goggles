@@ -47,9 +47,7 @@ void draw() {
   //}
   if (mode.equals("PLAYBUTTON")) {
     openingScreen();
-  }
-
-  else if (mode.equals("GAMEPLAY")) {
+  } else if (mode.equals("GAMEPLAY")) {
     lights();
     checkKeys();
     readServer();
@@ -98,9 +96,7 @@ void draw() {
       s.isDead = !s.isDead;
       mode = "DEAD";
     }
-  }
-
-  else if (mode.equals("DEAD")) {
+  } else if (mode.equals("DEAD")) {
     deathScreen();
   }
 }
@@ -162,7 +158,8 @@ public void deathScreen() {
   b = new Button("Play Again?", width/4, 3 * height/4, width/2, height/8);
   b.display();
   if (b.isClicked()) {
-    exit();
+    //exit();
+    resetBoard();
   }
 }
 
@@ -204,24 +201,40 @@ void readServer() {
       target = int(command.substring(0, command.indexOf(":")));
     }
     println(command);
-    if (command.indexOf("up") > 0 && target==ID) {//int(command.substring(0, command.indexOf(":up"))) == ID) {
+    if (command.indexOf("up") > 0) {// && target==ID) {//int(command.substring(0, command.indexOf(":up"))) == ID) {
       println("GOING UP");
-      s.turnUp();
+      if (command.substring(command.indexOf(":")).indexOf(":")>0) {
+        client.write("" + ID + "up");
+      } else {
+        s.turnUp();
+      }
       //s2.turnUp();
     }
     if (command.indexOf("left") > 0) {//int(command.substring(0, command.indexOf(":left"))) == ID) {
       println("GOING LEFT");
-      s.turnLeft();
+      if (command.substring(command.indexOf(":")).indexOf(":")>0) {
+        client.write("" + ID + "left");
+      } else {
+        s.turnLeft();
+      }
       //s2.turnLeft();
     }
     if (command.indexOf("down") > 0) {//int(command.substring(0, command.indexOf(":down"))) == ID) {
       println("GOING DOWN");
-      s.turnDown();
+      if (command.substring(command.indexOf(":")).indexOf(":")>0) {
+        client.write("" + ID + "down");
+      } else {
+        s.turnDown();
+      }
       //s2.turnDown();
     }
     if (command.indexOf("right") > 0) {//int(command.substring(0, command.indexOf(":right"))) == ID) {
       println("GOING RIGHT");
-      s.turnRight();
+      if (command.substring(command.indexOf(":")).indexOf(":")>0) {
+        client.write("" + ID + "right");
+      } else {
+        s.turnRight();
+      }
       //s2.turnRight();
     }
     if (command.indexOf(",") > 0) {
