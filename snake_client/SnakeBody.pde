@@ -41,7 +41,7 @@ public class SnakeBody {
   }
 
   void grow() {
-    segments.add(0, new SnakeBit(segments.get(0).x, segments.get(0).y, segments.get(0).z, size, c));
+    segments.add(/*segments.size(),*/ new SnakeBit(segments.get(segments.size()-1).x, segments.get(segments.size()-1).y, segments.get(segments.size()-1).z, size, c));
   }
 
   void turnUp() {

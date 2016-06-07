@@ -5,7 +5,7 @@ String input, serverOutput;
 int data[];
 int ID;
 int colore;
-boolean keepId, madeSnakes;
+boolean keepId, madeSnakes, scoreSent;
 
 //SnakeBody s;//, s2;
 //ArrayList<SnakeBody> otherSnakes;
@@ -42,6 +42,7 @@ void setup() {
   snakes = new ArrayList<SnakeBody>();
   keepId = false;
   madeSnakes = false;
+  scoreSent = false;
 }
 
 void draw() {
@@ -53,8 +54,9 @@ void draw() {
     readServer();
 
     textSize(15);
-    text(snakes.get(ID-1).segments.size(), 15, 15);
     background(0);
+    fill(255);
+    text(snakes.get(ID-1).segments.size(), 15, 15);
     for (Wall blah : Walls) {
       blah.display();
     }
@@ -103,7 +105,6 @@ void draw() {
       mode = "DEAD";
     }
   } else if (mode.equals("DEAD")) {
-    client.write("" + ID + ":score"+ (snakes.get(ID-1).segments.size()-5));
     deathScreen();
   }
 }
@@ -150,6 +151,10 @@ public void openingScreen() {
 
 
 public void deathScreen() {
+  if (!scoreSent) {
+    client.write("" + ID + ":score"+ (snakes.get(ID-1).segments.size()-5));
+    scoreSent = true;
+  }
   background(0);
   fill(255, 0, 0);
   textSize(width/8);
@@ -157,9 +162,10 @@ public void deathScreen() {
   text("GAME OVER", width/2, height/3);
   textSize(25);
   text("Score: " + (snakes.get(ID-1).segments.size()-5), width/2, height/2);
-  b = new Button("Play Again?", width/4, 3 * height/4, width/2, height/8);
+  b = new Button("Exit", width/4, 3 * height/4, width/2, height/8);
   b.display();
   if (b.isClicked()) {
+    client.stop();
     exit();
   }
 }
@@ -247,13 +253,11 @@ void readServer() {
       if (command.substring(command.indexOf(",")).indexOf(",")>0) {
         client.write("" + ID + "ate");
         println("did this");
-      } else if (command.indexOf(":")<0){
+      } else if (command.indexOf(":")<0) {
         println("did that");
         a.move(Integer.parseInt(command.substring(0, command.indexOf(","))), 
           Integer.parseInt(command.substring(command.indexOf(",")+1)), 0);
       }
-    }
-    if (command.indexOf("ate") > 0){
     }
   }
 }
